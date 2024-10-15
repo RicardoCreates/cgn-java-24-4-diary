@@ -94,4 +94,19 @@ class DiaryControllerIntegrationTest {
     }
 
 
+    @DirtiesContext
+    @Test
+    void postDiaryInvalidRequestBody() throws Exception {
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/api/diary")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                                        {
+                                            "description": "",
+                                            "status": ""
+                                        }
+                                        """)
+                )
+                .andExpect(status().isBadRequest());
+    }
 }
