@@ -11,7 +11,7 @@ type ContentPageProps = {
     entries: DiaryEntry[];
     description: string;
     setDescription: (value: string) => void;
-    handelStatusChange: (id: string, newStatus: string) => void;
+    handelStatusChange: (id: string, newStatus: "LESS_THAN_SIX_THOUSAND_STEPS" | "SIX_THOUSAND_STEPS" | "EIGHT_THOUSAND_STEPS" | "TEN_THOUSAND_STEPS" | "MORE_THAN_TEN_THOUSAND_STEPS") => void;
     handleDescriptionChange: (id: string, newDescription: string) => void;
     deleteEntry: (id: string) => void;
     updateEntry: (id: string, updatedDescription: string) => void;
@@ -31,23 +31,26 @@ export default function ContentPage({
                                     }: ContentPageProps) {
     return (
         <ContentContainer>
-            <h1>DiaryApp</h1>
             <StyledContainer>
                 <StyledList>
                     {entries.map((entry) => (
                         <StyledListItem key={entry.id}>
+                            <p>Diary Entry</p>
                             <InputField
                                 type="text"
                                 value={entry.description}
                                 onChange={(event) => handleDescriptionChange(entry.id, event.target.value)}
                             />
+                            <p>Steps done Today</p>
                             <StyledSelect
                                 value={entry.status}
-                                onChange={(event) => handelStatusChange(entry.id, event.target.value)}
+                                onChange={(event) => handelStatusChange(entry.id, event.target.value as "LESS_THAN_SIX_THOUSAND_STEPS" | "SIX_THOUSAND_STEPS" | "EIGHT_THOUSAND_STEPS" | "TEN_THOUSAND_STEPS" | "MORE_THAN_TEN_THOUSAND_STEPS")}
                             >
-                                <option value={"OPEN"}>OPEN</option>
-                                <option value={"IN_PROGRESS"}>IN PROGRESS</option>
-                                <option value={"DONE"}>DONE</option>
+                                <option value="LESS_THAN_SIX_THOUSAND_STEPS">under ♿︎ 6000 STEPS</option>
+                                <option value="SIX_THOUSAND_STEPS">6000 STEPS</option>
+                                <option value="EIGHT_THOUSAND_STEPS">8000 STEPS</option>
+                                <option value="TEN_THOUSAND_STEPS">10.000 STEPS</option>
+                                <option value="MORE_THAN_TEN_THOUSAND_STEPS">over ⚡︎ 10.000 STEPS</option>
                             </StyledSelect>
                             <Button onClick={() => updateEntry(entry.id, entry.description)}>
                                 Save Changes
@@ -85,8 +88,6 @@ const StyledContainer = styled.div`
     width: 90%;
     max-width: 800px;        
     background-color: white;
-    padding: 20px;
-    margin: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     display: flex;

@@ -10,7 +10,7 @@ import Footer from "./components/Footer.tsx";
 type Entry = {
     id: string;
     description: string;
-    status: string;
+    status: "LESS_THAN_SIX_THOUSAND_STEPS" | "SIX_THOUSAND_STEPS" | "EIGHT_THOUSAND_STEPS" | "TEN_THOUSAND_STEPS" | "MORE_THAN_TEN_THOUSAND_STEPS";
 };
 
 export default function App() {
@@ -27,7 +27,7 @@ export default function App() {
     function addEntry() {
         const newEntry : Partial<Entry> = {
             description: description,
-            status: "OPEN"
+            status: "LESS_THAN_SIX_THOUSAND_STEPS"
         };
 
         axios.post("/api/diary", newEntry)
@@ -72,7 +72,7 @@ export default function App() {
         ));
     }
 
-    function handelStatusChange(id: string, newStatus: string) {
+    function handelStatusChange(id: string, newStatus: "LESS_THAN_SIX_THOUSAND_STEPS" | "SIX_THOUSAND_STEPS" | "EIGHT_THOUSAND_STEPS" | "TEN_THOUSAND_STEPS" | "MORE_THAN_TEN_THOUSAND_STEPS") {
         setEntries(entries.map(entry =>
             entry.id === id ? {...entry, status: newStatus} : entry
         ));
