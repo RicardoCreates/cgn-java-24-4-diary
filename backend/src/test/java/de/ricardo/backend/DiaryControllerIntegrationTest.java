@@ -51,4 +51,47 @@ class DiaryControllerIntegrationTest {
                         }
                         """));
     }
+
+    @DirtiesContext
+    @Test
+    void getDiaryById() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/diary/1"))
+                .andExpect(status().isNotFound());
+    }
+
+    @DirtiesContext
+    @Test
+    void updateDiary() throws Exception {
+        diaryRepository.save(new Diary("1", "test", DiaryStatus.OPEN));
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/diary/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "id": "1",
+                                    "description": "test",
+                                    "status": "OPEN"
+                                }
+                                """)
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                        {
+                            "id": "1",
+                            "description": "test",
+                            "status": "OPEN"
+                        }
+                        """));
+    }
+
+
+    @DirtiesContext
+    @Test
+    void deleteDiary() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/diary/1"))
+                .andExpect(status().isNotFound());
+    }
+
+
 }
