@@ -1,6 +1,11 @@
-import './App.css'
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {Route, Routes} from "react-router-dom";
+import LandingPage from "./pages/LandingPage.tsx";
+import ContentPage from "./pages/ContentPage.tsx";
+import Navbar from "./components/Navbar.tsx";
+import GlobalStyles from "./Globalstyles.ts";
+import Footer from "./components/Footer.tsx";
 
 type Entry = {
     id: string;
@@ -75,41 +80,24 @@ export default function App() {
 
     return(
         <>
-            <h1>DiaryApp</h1>
-            <ul>
-                {entries.map((entry) => (
-                    <li key={entry.id}>
-                        <input
-                            type="text"
-                            value={entry.description}
-                            onChange={(event) => handleDescriptionChange(entry.id, event.target.value)}
-                        />
-                        <select
-                            value={entry.status}
-                            onChange={(event) => handelStatusChange(entry.id, event.target.value)}
-                        >
-                            <option value={"OPEN"}>OPEN</option>
-                            <option value={"IN_PROGRESS"}>IN PROGRESS</option>
-                            <option value={"DONE"}>DONE</option>
-                        </select>
-                        <button onClick={() => updateEntry(entry.id, entry.description)}>
-                            Save Changes
-                        </button>
-                        <button onClick={() => deleteEntry(entry.id)}>
-                            Delete
-                        </button>
-                    </li>
-                ))}
-            </ul>
-
-            <h2>Neues Entry hinzufügen</h2>
-            <input
-                type={"text"}
-                value={description}
-                onChange={event => setDescription(event.target.value)}
-                placeholder={"Entry eingeben"}
-            />
-            <button onClick={addEntry}>Hinzufügen</button>
+            <GlobalStyles />
+            <Navbar />
+            <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/diary" element={
+                    <ContentPage
+                        entries={entries}
+                        description={description}
+                        setDescription={setDescription}
+                        handelStatusChange={handelStatusChange}
+                        handleDescriptionChange={handleDescriptionChange}
+                        deleteEntry={deleteEntry}
+                        updateEntry={updateEntry}
+                        addEntry={addEntry}
+                    />
+                } />
+            </Routes>
+            <Footer />
         </>
     )
 }
