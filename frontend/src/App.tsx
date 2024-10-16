@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar.tsx";
 import GlobalStyles from "./Globalstyles.ts";
 import Footer from "./components/Footer.tsx";
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute.tsx";
+import ImageUpload from "./pages/ImageUpload.tsx";
 
 type Entry = {
     id: string;
@@ -107,6 +108,7 @@ export default function App() {
             <Navbar login={login} logout={logout} username={username}/>
             <Routes>
                 <Route path="/" element={<LandingPage />} />
+                <Route path={"/imageupload"} element={<ImageUpload />} />
                 <Route element={<ProtectedRoute username={username}/>}>
                 <Route path="/diary" element={
                     <ContentPage
