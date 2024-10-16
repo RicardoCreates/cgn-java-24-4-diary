@@ -25,14 +25,14 @@ class DiaryControllerIntegrationTest {
     @DirtiesContext
     @Test
     void getAll() throws Exception {
-        diaryRepository.save(new Diary("1", "test", DiaryStatus.OPEN));
+        diaryRepository.save(new Diary("1", "test", DiaryStatus.LESS_THAN_SIX_THOUSAND_STEPS));
         mockMvc.perform(MockMvcRequestBuilders.get("/api/diary"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         [{
                             "id": "1",
                             "description": "test",
-                            "status": "OPEN"
+                            "status": "LESS_THAN_SIX_THOUSAND_STEPS"
                         }]
                         """));
     }
@@ -46,7 +46,7 @@ class DiaryControllerIntegrationTest {
                                 .content("""
                                         {
                                             "description": "test",
-                                            "status": "OPEN"
+                                            "status": "LESS_THAN_SIX_THOUSAND_STEPS"
                                         }
                                         """)
                 )
@@ -54,7 +54,7 @@ class DiaryControllerIntegrationTest {
                 .andExpect(content().json("""
                         {
                             "description": "test",
-                            "status": "OPEN"
+                            "status": "LESS_THAN_SIX_THOUSAND_STEPS"
                         }
                         """));
     }
@@ -62,14 +62,14 @@ class DiaryControllerIntegrationTest {
     @DirtiesContext
     @Test
     void getDiaryById() throws Exception {
-        diaryRepository.save(new Diary("1", "test", DiaryStatus.OPEN));
+        diaryRepository.save(new Diary("1", "test", DiaryStatus.LESS_THAN_SIX_THOUSAND_STEPS));
         mockMvc.perform(MockMvcRequestBuilders.get("/api/diary/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         {
                             "id": "1",
                             "description": "test",
-                            "status": "OPEN"
+                            "status": "LESS_THAN_SIX_THOUSAND_STEPS"
                         }
                         """));
     }
@@ -77,7 +77,7 @@ class DiaryControllerIntegrationTest {
     @DirtiesContext
     @Test
     void updateDiary() throws Exception {
-        diaryRepository.save(new Diary("1", "test", DiaryStatus.OPEN));
+        diaryRepository.save(new Diary("1", "test", DiaryStatus.LESS_THAN_SIX_THOUSAND_STEPS));
 
         mockMvc.perform(
                         MockMvcRequestBuilders.put("/api/diary/1")
@@ -86,7 +86,7 @@ class DiaryControllerIntegrationTest {
                                 {
                                     "id": "1",
                                     "description": "test",
-                                    "status": "OPEN"
+                                    "status": "LESS_THAN_SIX_THOUSAND_STEPS"
                                 }
                                 """)
                 )
@@ -95,7 +95,7 @@ class DiaryControllerIntegrationTest {
                         {
                             "id": "1",
                             "description": "test",
-                            "status": "OPEN"
+                            "status": "LESS_THAN_SIX_THOUSAND_STEPS"
                         }
                         """));
     }
@@ -104,7 +104,7 @@ class DiaryControllerIntegrationTest {
     @DirtiesContext
     @Test
     void deleteDiary() throws Exception {
-        diaryRepository.save(new Diary("1", "test", DiaryStatus.OPEN));
+        diaryRepository.save(new Diary("1", "test", DiaryStatus.LESS_THAN_SIX_THOUSAND_STEPS));
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/diary/1"))
                 .andExpect(status().isOk());
     }

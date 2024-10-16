@@ -28,11 +28,11 @@ class DiaryServiceTest {
 
     @Test
     void save() {
-        Diary expectedDiary = new Diary("1", "My first diary entry", DiaryStatus.OPEN);
+        Diary expectedDiary = new Diary("1", "My first diary entry", DiaryStatus.SIX_THOUSAND_STEPS);
 
         when(diaryRepository.save(any(Diary.class))).thenReturn(expectedDiary);
 
-        Diary result = diaryService.save(new Diary("My first diary entry", DiaryStatus.OPEN));
+        Diary result = diaryService.save(new Diary("My first diary entry", DiaryStatus.SIX_THOUSAND_STEPS));
 
         verify(diaryRepository, times(1)).save(any(Diary.class));
 
@@ -41,7 +41,7 @@ class DiaryServiceTest {
 
     @Test
     void getById() {
-        Diary expectedDiary = new Diary("1", "My first diary entry", DiaryStatus.OPEN);
+        Diary expectedDiary = new Diary("1", "My first diary entry", DiaryStatus.SIX_THOUSAND_STEPS);
 
         when(diaryRepository.findById("1")).thenReturn(java.util.Optional.of(expectedDiary));
 
@@ -54,11 +54,11 @@ class DiaryServiceTest {
 
     @Test
     void update() {
-        Diary expectedDiary = new Diary("1", "My first diary entry", DiaryStatus.OPEN);
+        Diary expectedDiary = new Diary("1", "My first diary entry", DiaryStatus.SIX_THOUSAND_STEPS);
 
         when(diaryRepository.save(any(Diary.class))).thenReturn(expectedDiary);
 
-        diaryService.update(new Diary("1", "My first diary entry", DiaryStatus.OPEN));
+        diaryService.update(new Diary("1", "My first diary entry", DiaryStatus.SIX_THOUSAND_STEPS));
 
         verify(diaryRepository, times(1)).save(any(Diary.class));
     }
