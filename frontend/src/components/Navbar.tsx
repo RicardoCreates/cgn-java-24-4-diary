@@ -1,7 +1,13 @@
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 
-export default function Navbar() {
+type NavbarProps = {
+    login: () => void
+    logout: () => void
+    username: string
+}
+
+export default function Navbar(props: Readonly<NavbarProps>) {
     return (
         <StyledNavbar>
             <StyledLogo>DiaryApp</StyledLogo>
@@ -9,6 +15,10 @@ export default function Navbar() {
             <StyledNavItem to={"/"}>Home</StyledNavItem>
             <StyledNavItem to={"/diary"}>Diary</StyledNavItem>
             </StyledNavItems>
+                <StyledLogin>
+                <StyledText>Hello {props.username}</StyledText>
+                {(!props.username || props.username === "anonymousUser") ? <Button onClick={props.login}>Login</Button> : <Button onClick={props.logout}>Logout</Button>}
+                </StyledLogin>
         </StyledNavbar>
     );
 }
@@ -52,3 +62,31 @@ const StyledLogo = styled.h1`
     margin: 0;
     font-weight: bold;
 `;
+
+const Button = styled.button`
+    background-color: transparent;
+    color: #ffffff;
+    padding: 5px 10px;
+    border: 0.5px solid #303030;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+
+    &:hover {
+        background-color: rgba(144, 202, 249, 0.1);
+    }
+
+    &:active {
+        background-color: rgba(144, 202, 249, 0.2);
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+`;
+
+const StyledText = styled.p`
+    color: black;
+`
+
+const StyledLogin = styled.div`
+    display: flex;
+    flex-direction: column-reverse;
+`
