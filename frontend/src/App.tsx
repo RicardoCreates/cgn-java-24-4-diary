@@ -6,6 +6,7 @@ import ContentPage from "./pages/ContentPage.tsx";
 import Navbar from "./components/Navbar.tsx";
 import GlobalStyles from "./Globalstyles.ts";
 import Footer from "./components/Footer.tsx";
+import ProtectedRoute from "./components/protectedRoute/ProtectedRoute.tsx";
 
 type Entry = {
     id: string;
@@ -16,13 +17,30 @@ type Entry = {
 export default function App() {
     const [entries, setEntries] = useState<Entry[]>([]);
     const [description, setDescription] = useState<string>("");
+    const [username, setUsername] = useState<string>("")
+
+    function login(){
+        const host = window.location.host === 'localhost:5173' ? 'http://localhost:8080' : window.location.origin
+        window.open(host+'/oauth2/authorization/github', '_self')
+    }
+
+    function logout() {
+        const host = window.location.host === 'localhost:5173' ? 'http://localhost:8080' : window.location.origin
+        window.open(host+'/api/auth/logout', '_self')
+    }
 
 
-    useEffect(() => {
+    function getMe() {
+        axios.get("api/auth/me")
+            .then(r => setUsername(r.data))
+            .catch(() => setUsername(""))
+    }
+
+    function fetchData() {
         axios.get("/api/diary")
             .then(response => setEntries(response.data))
             .catch(error => console.log(error));
-    }, []);
+    }
 
     function addEntry() {
         const newEntry : Partial<Entry> = {
@@ -78,12 +96,18 @@ export default function App() {
         ));
     }
 
+    useEffect(() => {
+        fetchData()
+        getMe()
+    }, []);
+
     return(
         <>
             <GlobalStyles />
-            <Navbar />
+            <Navbar login={login} logout={logout} username={username}/>
             <Routes>
                 <Route path="/" element={<LandingPage />} />
+                <Route element={<ProtectedRoute username={username}/>}>
                 <Route path="/diary" element={
                     <ContentPage
                         entries={entries}
@@ -96,6 +120,7 @@ export default function App() {
                         addEntry={addEntry}
                     />
                 } />
+                </Route>
             </Routes>
             <Footer />
         </>
