@@ -11,9 +11,11 @@ import java.util.UUID;
 public class DiaryService {
 
     private final DiaryRepository diaryRepository;
+    private final IdService idService;
 
-    DiaryService(DiaryRepository diaryRepository){
+    DiaryService(DiaryRepository diaryRepository, IdService idService){
         this.diaryRepository = diaryRepository;
+        this.idService = idService;
     }
 
     List<Diary> getAll() {
@@ -21,9 +23,9 @@ public class DiaryService {
     }
 
     public Diary save(Diary diary) {
-        String id = UUID.randomUUID().toString();
-        Diary todoToSave = diary.withId(id);
-        return diaryRepository.save(todoToSave);
+        String id = idService.randomId();
+        Diary entryToSave = diary.withId(id);
+        return diaryRepository.save(entryToSave);
     }
 
     Diary getById(String id) {
