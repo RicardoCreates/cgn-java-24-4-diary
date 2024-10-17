@@ -27,11 +27,6 @@ public class DiaryController {
         return diaryService.getAll();
     }
 
-//    @PostMapping
-//    Diary save(@RequestBody Diary diary) {
-//        return diaryService.save(diary);
-//    }
-
     @PostMapping
     Diary save(@RequestPart("data") Diary diary, @RequestPart("file") MultipartFile image) throws IOException {
         if (image != null && !image.isEmpty()) {
@@ -46,28 +41,14 @@ public class DiaryController {
         return diaryService.getById(id);
     }
 
-//    @PutMapping(path = {"/{id}/update", "/{id}"})
-//    Diary update(@PathVariable String id, @RequestBody Diary diary) {
-//        if (!diary.id().equals(id)) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The id in the url does not match the request body's id");
-//        }
-//        return diaryService.update(diary);
-//    }
-
     @PutMapping(path = {"/{id}/update", "/{id}"})
     Diary update(@PathVariable String id, @RequestPart("data") Diary diary, @RequestPart("file") MultipartFile image) throws IOException {
-        try {
-            String imageUrl = cloudinaryService.uploadImage(image);
-            diary = new Diary(diary.description(), diary.status(), imageUrl);
-        } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to upload image", e);
-        }
-        if (!diary.id().equals(id)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The id in the url does not match the request body's id");
-        }
         if (image != null && !image.isEmpty()) {
             String imageUrl = cloudinaryService.uploadImage(image);
             diary = new Diary(id, diary.description(), diary.status(), imageUrl);
+        }
+        if (!diary.id().equals(id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The id in the url does not match the request body's id");
         }
         return diaryService.update(diary);
     }

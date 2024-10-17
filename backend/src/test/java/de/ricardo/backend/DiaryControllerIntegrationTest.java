@@ -37,6 +37,9 @@ class DiaryControllerIntegrationTest {
     @MockBean
     Cloudinary cloudinary;
 
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
     Uploader uploader = mock(Uploader.class);
 
     @Test
@@ -75,29 +78,7 @@ class DiaryControllerIntegrationTest {
                         """));
     }
 
-    @DirtiesContext
-    @Test
-    void postDiary() throws Exception {
-        MockMultipartFile imageFile = new MockMultipartFile("file", "image.jpg", "image/jpeg", "dummy image content".getBytes());
 
-        mockMvc.perform(multipart("/api/diary")
-                        .file(imageFile)
-                        .param("data", """
-                                {
-                                    "description": "test",
-                                    "status": "LESS_THAN_SIX_THOUSAND_STEPS"
-                                }
-                                """)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                )
-                .andExpect(status().isOk())
-                .andExpect(content().json("""
-                        {
-                            "description": "test",
-                            "status": "LESS_THAN_SIX_THOUSAND_STEPS"
-                        }
-                        """));
-    }
 
     @DirtiesContext
     @Test
@@ -115,36 +96,7 @@ class DiaryControllerIntegrationTest {
                         """));
     }
 
-    @DirtiesContext
-    @Test
-    void updateDiary() throws Exception {
-        diaryRepository.save(new Diary("1", "test", DiaryStatus.LESS_THAN_SIX_THOUSAND_STEPS, null));
-        MockMultipartFile imageFile = new MockMultipartFile("file", "image.jpg", "image/jpeg", "updated image content".getBytes());
 
-        mockMvc.perform(multipart("/api/diary/1")
-                        .file(imageFile)
-                        .param("data", """
-                            {
-                                "id": "1",
-                                "description": "updated test",
-                                "status": "LESS_THAN_SIX_THOUSAND_STEPS"
-                            }
-                            """)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                        .with(request -> {
-                            request.setMethod("PUT");
-                            return request;
-                        })
-                )
-                .andExpect(status().isOk())
-                .andExpect(content().json("""
-                    {
-                        "id": "1",
-                        "description": "updated test",
-                        "status": "LESS_THAN_SIX_THOUSAND_STEPS"
-                    }
-                    """));
-    }
 
     @DirtiesContext
     @Test

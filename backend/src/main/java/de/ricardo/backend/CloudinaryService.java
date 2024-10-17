@@ -18,8 +18,10 @@ public class CloudinaryService {
     }
 
     public String uploadImage(MultipartFile image) throws IOException {
-        try (var inputStream = image.getInputStream()) {
-            Map response = cloudinary.uploader().upload(inputStream, Map.of());
-            return response.get("url").toString();
-        }
-}}
+        File fileToUpload = File.createTempFile("file", null, new File("."));
+        image.transferTo(fileToUpload);
+        Map response = cloudinary.uploader().upload(fileToUpload, Map.of());
+        return response.get("url").toString();
+    }
+
+}
