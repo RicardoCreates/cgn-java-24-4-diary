@@ -14,7 +14,7 @@ public class BackendApplication {
 
     @Bean
     public Cloudinary createCloudinary() {
-        return new Cloudinary("cloudinary://656837244356987:0VeLppIgnVQzF2GHHbs_bnzBNOs@dxiavjr9h");
+        return new Cloudinary(System.getenv("CLOUDINARY_URL"));
     }
 
 }
