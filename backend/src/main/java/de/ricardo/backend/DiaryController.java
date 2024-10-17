@@ -56,6 +56,12 @@ public class DiaryController {
 
     @PutMapping(path = {"/{id}/update", "/{id}"})
     Diary update(@PathVariable String id, @RequestPart("data") Diary diary, @RequestPart("file") MultipartFile image) throws IOException {
+        try {
+            String imageUrl = cloudinaryService.uploadImage(image);
+            diary = new Diary(diary.description(), diary.status(), imageUrl);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to upload image", e);
+        }
         if (!diary.id().equals(id)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The id in the url does not match the request body's id");
         }

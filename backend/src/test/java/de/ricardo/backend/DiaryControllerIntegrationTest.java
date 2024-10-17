@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -25,14 +26,15 @@ class DiaryControllerIntegrationTest {
     @DirtiesContext
     @Test
     void getAll() throws Exception {
-        diaryRepository.save(new Diary("1", "test", DiaryStatus.LESS_THAN_SIX_THOUSAND_STEPS));
+        diaryRepository.save(new Diary("1", "test", DiaryStatus.LESS_THAN_SIX_THOUSAND_STEPS, null));
         mockMvc.perform(MockMvcRequestBuilders.get("/api/diary"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         [{
                             "id": "1",
                             "description": "test",
-                            "status": "LESS_THAN_SIX_THOUSAND_STEPS"
+                            "status": "LESS_THAN_SIX_THOUSAND_STEPS",
+                            "imageUrl": null
                         }]
                         """));
     }
@@ -40,15 +42,17 @@ class DiaryControllerIntegrationTest {
     @DirtiesContext
     @Test
     void postDiary() throws Exception {
-        mockMvc.perform(
-                        MockMvcRequestBuilders.post("/api/diary")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("""
-                                        {
-                                            "description": "test",
-                                            "status": "LESS_THAN_SIX_THOUSAND_STEPS"
-                                        }
-                                        """)
+        MockMultipartFile imageFile = new MockMultipartFile("file", "image.jpg", "image/jpeg", "dummy image content".getBytes());
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/diary")
+                        .file(imageFile)
+                        .param("data", """
+                                {
+                                    "description": "test",
+                                    "status": "LESS_THAN_SIX_THOUSAND_STEPS"
+                                }
+                                """)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
@@ -62,14 +66,15 @@ class DiaryControllerIntegrationTest {
     @DirtiesContext
     @Test
     void getDiaryById() throws Exception {
-        diaryRepository.save(new Diary("1", "test", DiaryStatus.LESS_THAN_SIX_THOUSAND_STEPS));
+        diaryRepository.save(new Diary("1", "test", DiaryStatus.LESS_THAN_SIX_THOUSAND_STEPS, null));
         mockMvc.perform(MockMvcRequestBuilders.get("/api/diary/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                         {
                             "id": "1",
                             "description": "test",
-                            "status": "LESS_THAN_SIX_THOUSAND_STEPS"
+                            "status": "LESS_THAN_SIX_THOUSAND_STEPS",
+                            "imageUrl": null
                         }
                         """));
     }
@@ -77,34 +82,38 @@ class DiaryControllerIntegrationTest {
     @DirtiesContext
     @Test
     void updateDiary() throws Exception {
-        diaryRepository.save(new Diary("1", "test", DiaryStatus.LESS_THAN_SIX_THOUSAND_STEPS));
+        diaryRepository.save(new Diary("1", "test", DiaryStatus.LESS_THAN_SIX_THOUSAND_STEPS, null));
+        MockMultipartFile imageFile = new MockMultipartFile("file", "image.jpg", "image/jpeg", "updated image content".getBytes());
 
-        mockMvc.perform(
-                        MockMvcRequestBuilders.put("/api/diary/1")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("""
-                                {
-                                    "id": "1",
-                                    "description": "test",
-                                    "status": "LESS_THAN_SIX_THOUSAND_STEPS"
-                                }
-                                """)
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/diary/1")
+                        .file(imageFile)
+                        .param("data", """
+                            {
+                                "id": "1",
+                                "description": "updated test",
+                                "status": "LESS_THAN_SIX_THOUSAND_STEPS"
+                            }
+                            """)
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .with(request -> {
+                            request.setMethod("PUT");
+                            return request;
+                        })
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
-                        {
-                            "id": "1",
-                            "description": "test",
-                            "status": "LESS_THAN_SIX_THOUSAND_STEPS"
-                        }
-                        """));
+                    {
+                        "id": "1",
+                        "description": "updated test",
+                        "status": "LESS_THAN_SIX_THOUSAND_STEPS"
+                    }
+                    """));
     }
-
 
     @DirtiesContext
     @Test
     void deleteDiary() throws Exception {
-        diaryRepository.save(new Diary("1", "test", DiaryStatus.LESS_THAN_SIX_THOUSAND_STEPS));
+        diaryRepository.save(new Diary("1", "test", DiaryStatus.LESS_THAN_SIX_THOUSAND_STEPS, null));
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/diary/1"))
                 .andExpect(status().isOk());
     }
@@ -116,22 +125,19 @@ class DiaryControllerIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
-
     @DirtiesContext
     @Test
     void postDiaryInvalidRequestBody() throws Exception {
         mockMvc.perform(
-                        MockMvcRequestBuilders.post("/api/diary")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("""
+                        MockMvcRequestBuilders.multipart("/api/diary")
+                                .param("data", """
                                         {
                                             "description": "",
                                             "status": ""
                                         }
                                         """)
+                                .contentType(MediaType.MULTIPART_FORM_DATA)
                 )
                 .andExpect(status().isBadRequest());
     }
 }
-
-
