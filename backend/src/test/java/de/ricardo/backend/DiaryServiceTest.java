@@ -12,12 +12,14 @@ import static org.mockito.Mockito.*;
 class DiaryServiceTest {
 
     private DiaryRepository diaryRepository;
+    private IdService idService;
     private DiaryService diaryService;
 
     @BeforeEach
     void setUp() {
         diaryRepository = mock(DiaryRepository.class);
-        diaryService = new DiaryService(diaryRepository);
+        idService = mock(IdService.class);
+        diaryService = new DiaryService(diaryRepository, idService);
     }
 
     @Test
@@ -30,10 +32,12 @@ class DiaryServiceTest {
     void save() {
         Diary expectedDiary = new Diary("1", "My first diary entry", DiaryStatus.SIX_THOUSAND_STEPS);
 
+        when(idService.randomId()).thenReturn("1");
         when(diaryRepository.save(any(Diary.class))).thenReturn(expectedDiary);
 
         Diary result = diaryService.save(new Diary("My first diary entry", DiaryStatus.SIX_THOUSAND_STEPS));
 
+        verify(idService, times(1)).randomId();
         verify(diaryRepository, times(1)).save(any(Diary.class));
 
         assertEquals(expectedDiary, result);
