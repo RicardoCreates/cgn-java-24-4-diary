@@ -23,5 +23,6 @@ public class CloudinaryConfig {
                 "api_secret", apiSecret, // Replace with your API Secret
                 "secure", true);
         return new Cloudinary(config);
+
     }
 }
