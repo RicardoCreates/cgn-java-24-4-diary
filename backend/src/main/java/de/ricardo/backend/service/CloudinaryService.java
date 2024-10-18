@@ -21,6 +21,8 @@ public class CloudinaryService {
         File fileToUpload = File.createTempFile("file", null);
         image.transferTo(fileToUpload);
         Map response = cloudinary.uploader().upload(fileToUpload, Map.of());
-        return response.get("url").toString();
+        String imageUrl = response.get("url").toString();
+        System.out.println("Image uploaded successfully: " + imageUrl);
+        return imageUrl;
     }
 }

@@ -1,9 +1,12 @@
 package de.ricardo.backend;
 
+import de.ricardo.backend.service.CloudinaryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,13 +16,15 @@ class DiaryServiceTest {
 
     private DiaryRepository diaryRepository;
     private IdService idService;
+    private CloudinaryService cloudinaryService;
     private DiaryService diaryService;
 
     @BeforeEach
     void setUp() {
         diaryRepository = mock(DiaryRepository.class);
         idService = mock(IdService.class);
-        diaryService = new DiaryService(diaryRepository, idService);
+        cloudinaryService = mock(CloudinaryService.class);
+        diaryService = new DiaryService(diaryRepository, idService, cloudinaryService);
     }
 
     @Test
@@ -29,15 +34,18 @@ class DiaryServiceTest {
     }
 
     @Test
-    void save() {
-        Diary expectedDiary = new Diary("My first diary entry", DiaryStatus.SIX_THOUSAND_STEPS, "test");
+    void save() throws IOException {
+        Diary expectedDiary = new Diary("1", "My first diary entry", DiaryStatus.SIX_THOUSAND_STEPS, "test-url");
+        MultipartFile image = mock(MultipartFile.class);
 
         when(idService.randomId()).thenReturn("1");
+        when(cloudinaryService.uploadImage(image)).thenReturn("test-url");
         when(diaryRepository.save(any(Diary.class))).thenReturn(expectedDiary);
 
-        Diary result = diaryService.save(new Diary("My first diary entry", DiaryStatus.SIX_THOUSAND_STEPS, "test"));
+        Diary result = diaryService.save(new Diary("My first diary entry", DiaryStatus.SIX_THOUSAND_STEPS, null), image);
 
         verify(idService, times(1)).randomId();
+        verify(cloudinaryService, times(1)).uploadImage(image);
         verify(diaryRepository, times(1)).save(any(Diary.class));
 
         assertEquals(expectedDiary, result);

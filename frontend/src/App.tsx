@@ -42,16 +42,22 @@ export default function App() {
             .catch(error => console.log(error));
     }
 
-    function addEntry() {
-        const newEntry : Partial<Entry> = {
-            description: description,
-            status: "LESS_THAN_SIX_THOUSAND_STEPS"
-        };
+    function addEntry(description: string, file: File | null) {
+        const formData = new FormData();
+        formData.append('description', description);
+        formData.append('status', 'LESS_THAN_SIX_THOUSAND_STEPS'); // Beispielstatus
+        if (file) {
+            formData.append('file', file);
+        }
 
-        axios.post("/api/diary", newEntry)
+        axios.post('/api/diary', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
             .then(response => {
                 setEntries([...entries, response.data]);
-                setDescription("");
+                setDescription('');
             })
             .catch(error => console.log(error));
     }

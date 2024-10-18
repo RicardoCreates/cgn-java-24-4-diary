@@ -2,7 +2,6 @@ package de.ricardo.backend;
 
 
 import de.ricardo.backend.service.CloudinaryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,15 +32,8 @@ public class DiaryController {
                               @RequestParam("status") DiaryStatus status,
                               @RequestParam(value = "file", required = false) MultipartFile file) {
         try {
-            String imageUrl = null;
-            if (file != null && !file.isEmpty()) {
-                imageUrl = cloudinaryService.uploadImage(file);
-            }
-
-            Diary diary = new Diary(description, status, imageUrl);
-
-            return diaryService.save(diary);
-
+            Diary diary = new Diary(description, status, null);
+            return diaryService.save(diary, file);
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Image upload failed", e);
         }
@@ -49,7 +41,11 @@ public class DiaryController {
 
     @PostMapping(consumes = "application/json")
     public Diary saveWithoutFile(@RequestBody Diary diary) {
-        return diaryService.save(diary);
+        try {
+            return diaryService.save(diary, null);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Image upload failed", e);
+        }
     }
 
     @GetMapping("/{id}")
