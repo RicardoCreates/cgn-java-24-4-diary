@@ -1,5 +1,8 @@
 package de.ricardo.backend;
 
+
+import de.ricardo.backend.service.CloudinaryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -10,7 +13,11 @@ import java.util.List;
 @RequestMapping("/api/diary")
 public class DiaryController {
 
+    @Autowired
     private final DiaryService diaryService;
+
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     DiaryController(DiaryService diaryService){
         this.diaryService = diaryService;
