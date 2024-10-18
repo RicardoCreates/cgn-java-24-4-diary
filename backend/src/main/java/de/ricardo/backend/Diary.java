@@ -19,5 +19,9 @@ public record Diary(
         return new Diary(id, description, status, imageUrl);
     }
 
+    public Diary withImageUrl(String imageUrl) {
+        return new Diary(id, description, status, imageUrl);
+    }
+
 
 }

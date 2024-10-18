@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import {Link} from "react-router-dom";
+import {useState} from "react";
 
 type DiaryEntry = {
     id: string;
     description: string;
     status: string;
+    imageUrl?: string;
 };
 
 type ContentPageProps = {
@@ -15,7 +17,7 @@ type ContentPageProps = {
     handleDescriptionChange: (id: string, newDescription: string) => void;
     deleteEntry: (id: string) => void;
     updateEntry: (id: string, updatedDescription: string) => void;
-    addEntry: () => void;
+    addEntry: (description: string, file: File | null) => void;
 };
 
 
@@ -29,6 +31,8 @@ export default function ContentPage({
                                         updateEntry,
                                         addEntry
                                     }: ContentPageProps) {
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
     return (
         <ContentContainer>
             <StyledContainer>
@@ -52,6 +56,7 @@ export default function ContentPage({
                                 <option value="TEN_THOUSAND_STEPS">10.000 STEPS</option>
                                 <option value="MORE_THAN_TEN_THOUSAND_STEPS">over ⚡︎ 10.000 STEPS</option>
                             </StyledSelect>
+                            {entry.imageUrl && <img src={entry.imageUrl} alt="Uploaded" />}
                             <Button onClick={() => updateEntry(entry.id, entry.description)}>
                                 Save Changes
                             </Button>
@@ -69,7 +74,11 @@ export default function ContentPage({
                     onChange={event => setDescription(event.target.value)}
                     placeholder={"Entry eingeben"}
                 />
-                <Button onClick={addEntry}>Hinzufügen</Button>
+                <InputField
+                    type="file"
+                    onChange={event => setSelectedFile(event.target.files ? event.target.files[0] : null)}
+                />
+                <Button onClick={() => addEntry(description, selectedFile)}>Hinzufügen</Button>
                 <StyledLink to="/">Go Back</StyledLink>
             </StyledContainer>
         </ContentContainer>
