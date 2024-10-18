@@ -13,6 +13,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.io.IOException;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -177,6 +178,42 @@ class DiaryControllerIntegrationTest {
                 )
                 .andExpect(status().isBadRequest());
     }
+
+    @DirtiesContext
+    @Test
+    void postDiaryWithFileUploadFailure() throws Exception {
+        when(cloudinary.uploader()).thenReturn(uploader);
+        when(uploader.upload(any(), any())).thenThrow(new IOException("Upload failed"));
+
+        MockMultipartFile file = new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "test".getBytes());
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.multipart("/api/diary")
+                                .file(file)
+                                .param("description", "test")
+                                .param("status", "LESS_THAN_SIX_THOUSAND_STEPS")
+                )
+                .andExpect(status().isInternalServerError());
+    }
+
+    @DirtiesContext
+    @Test
+    void postDiaryWithInvalidJson() throws Exception {
+        String invalidJsonContent = """
+            {
+                "description": "test",
+                "status": "INVALID_STATUS"
+            }
+            """;
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/api/diary")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(invalidJsonContent)
+                )
+                .andExpect(status().isBadRequest());
+    }
+
 }
 
 
