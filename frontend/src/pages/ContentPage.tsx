@@ -77,12 +77,14 @@ export default function ContentPage({
                     onChange={event => setDescription(event.target.value)}
                     placeholder={"add Entry"}
                 />
-                <InputField
+                <FileInputButton htmlFor="file-upload">Image Upload</FileInputButton>
+                <HiddenFileInput
+                    id="file-upload"
                     type="file"
                     onChange={event => setSelectedFile(event.target.files ? event.target.files[0] : null)}
                 />
                 <Button onClick={() => addEntry(description, selectedFile)}>Hinzufügen</Button>
-                <StyledLink to="/">Go Back</StyledLink>
+                <StyledLink to="/">◁</StyledLink>
             </StyledContainer>
         </ContentContainer>
     );
@@ -191,7 +193,7 @@ const StyledLink = styled(Link)`
     color: black;
     font-size: 0.8rem;
     font-weight: 500;
-    padding: 4px 2px;
+    padding: 0px 15px;
     margin: 20px;
     box-shadow: 0 0 5px rgba(66, 165, 245, 0.5);
     transition: background-color 0.3s ease;
@@ -205,4 +207,26 @@ const StyledLink = styled(Link)`
         background-color: #34495e;
         border-radius: 5px;
     }
+`;
+
+const FileInputButton = styled.label`
+    background-color: #42a5f5;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    margin: 10px 0;
+
+    &:hover {
+        background-color: #1e88e5;
+    }
+
+    &:active {
+        background-color: #1565c0;
+    }
+`;
+
+const HiddenFileInput = styled.input`
+    display: none;
 `;
