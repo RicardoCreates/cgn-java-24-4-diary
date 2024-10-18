@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import {Link} from "react-router-dom";
-import {useState} from "react";
 
 type DiaryEntry = {
     id: string;
@@ -18,6 +17,8 @@ type ContentPageProps = {
     deleteEntry: (id: string) => void;
     updateEntry: (id: string, updatedDescription: string) => void;
     addEntry: (description: string, file: File | null) => void;
+    selectedFile: File | null;
+    setSelectedFile: (file: File | null) => void;
 };
 
 
@@ -29,9 +30,11 @@ export default function ContentPage({
                                         handleDescriptionChange,
                                         deleteEntry,
                                         updateEntry,
-                                        addEntry
+                                        addEntry,
+                                        selectedFile,
+                                        setSelectedFile
                                     }: ContentPageProps) {
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
 
     return (
         <ContentContainer>
@@ -67,12 +70,12 @@ export default function ContentPage({
                     ))}
                 </StyledList>
 
-                <h2>Neues Entry hinzufügen</h2>
+                <h2>Add new Entry</h2>
                 <InputField
                     type={"text"}
                     value={description}
                     onChange={event => setDescription(event.target.value)}
-                    placeholder={"Entry eingeben"}
+                    placeholder={"add Entry"}
                 />
                 <InputField
                     type="file"
