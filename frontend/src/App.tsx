@@ -17,6 +17,7 @@ type Entry = {
 export default function App() {
     const [entries, setEntries] = useState<Entry[]>([]);
     const [description, setDescription] = useState<string>("");
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [username, setUsername] = useState<string>("")
 
     function login(){
@@ -45,7 +46,7 @@ export default function App() {
     function addEntry(description: string, file: File | null) {
         const formData = new FormData();
         formData.append('description', description);
-        formData.append('status', 'LESS_THAN_SIX_THOUSAND_STEPS'); // Beispielstatus
+        formData.append('status', 'LESS_THAN_SIX_THOUSAND_STEPS');
         if (file) {
             formData.append('file', file);
         }
@@ -58,6 +59,7 @@ export default function App() {
             .then(response => {
                 setEntries([...entries, response.data]);
                 setDescription('');
+                setSelectedFile(null);
             })
             .catch(error => console.log(error));
     }
@@ -124,6 +126,8 @@ export default function App() {
                         deleteEntry={deleteEntry}
                         updateEntry={updateEntry}
                         addEntry={addEntry}
+                        selectedFile={selectedFile}
+                        setSelectedFile={setSelectedFile}
                     />
                 } />
                 </Route>
