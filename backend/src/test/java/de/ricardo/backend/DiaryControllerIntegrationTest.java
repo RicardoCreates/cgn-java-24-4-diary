@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -59,25 +60,45 @@ class DiaryControllerIntegrationTest {
     @DirtiesContext
     @Test
     void postDiary() throws Exception {
+        when(cloudinary.uploader()).thenReturn(uploader);
+        when(uploader.upload(any(), any())).thenReturn(Map.of("url", "test"));
+
+        MockMultipartFile file = new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "test".getBytes());
+
         mockMvc.perform(
-                        MockMvcRequestBuilders.post("/api/diary")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("""
-                                        {
-                                            "description": "test",
-                                            "status": "LESS_THAN_SIX_THOUSAND_STEPS",
-                                            "imageUrl": "test"
-                                        }
-                                        """)
+                        MockMvcRequestBuilders.multipart("/api/diary")
+                                .file(file)
+                                .param("description", "test")
+                                .param("status", "LESS_THAN_SIX_THOUSAND_STEPS")
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
-                        {
-                            "description": "test",
-                            "status": "LESS_THAN_SIX_THOUSAND_STEPS",
-                            "imageUrl": "test"
-                        }
-                        """));
+                    {
+                        "description": "test",
+                        "status": "LESS_THAN_SIX_THOUSAND_STEPS",
+                        "imageUrl": "test"
+                    }
+                    """));
+    }
+
+    @DirtiesContext
+    @Test
+    void postDiaryWithoutFile() throws Exception {
+        String jsonContent = """
+            {
+                "description": "test",
+                "status": "LESS_THAN_SIX_THOUSAND_STEPS",
+                "imageUrl": null
+            }
+            """;
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/api/diary")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonContent)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().json(jsonContent));
     }
 
     @DirtiesContext
@@ -144,19 +165,15 @@ class DiaryControllerIntegrationTest {
     }
 
 
-    @DirtiesContext
     @Test
     void postDiaryInvalidRequestBody() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "test".getBytes());
+
         mockMvc.perform(
-                        MockMvcRequestBuilders.post("/api/diary")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("""
-                                        {
-                                            "description": "",
-                                            "status": "",
-                                            "imageUrl": ""
-                                        }
-                                        """)
+                        MockMvcRequestBuilders.multipart("/api/diary")
+                                .file(file)
+                                .param("description", "")
+                                .param("status", "")
                 )
                 .andExpect(status().isBadRequest());
     }
