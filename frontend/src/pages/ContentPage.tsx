@@ -15,7 +15,7 @@ type ContentPageProps = {
     handelStatusChange: (id: string, newStatus: "LESS_THAN_SIX_THOUSAND_STEPS" | "SIX_THOUSAND_STEPS" | "EIGHT_THOUSAND_STEPS" | "TEN_THOUSAND_STEPS" | "MORE_THAN_TEN_THOUSAND_STEPS") => void;
     handleDescriptionChange: (id: string, newDescription: string) => void;
     deleteEntry: (id: string) => void;
-    updateEntry: (id: string, updatedDescription: string) => void;
+    updateEntry: (id: string, updatedDescription: string, updatedFile: File | null) => void;
     addEntry: (description: string, file: File | null) => void;
     selectedFile: File | null;
     setSelectedFile: (file: File | null) => void;
@@ -60,7 +60,14 @@ export default function ContentPage({
                                 <option value="MORE_THAN_TEN_THOUSAND_STEPS">over ⚡︎ 10.000 STEPS</option>
                             </StyledSelect>
                             {entry.imageUrl && <img src={entry.imageUrl} alt="Uploaded" />}
-                            <Button onClick={() => updateEntry(entry.id, entry.description)}>
+                            <FileInputButton htmlFor={`file-upload-${entry.id}`}>Update Image</FileInputButton>
+                            <HiddenFileInput
+                                id={`file-upload-${entry.id}`}
+                                type="file"
+                                onChange={(event) => setSelectedFile(event.target.files ? event.target.files[0] : null)}
+                            />
+
+                            <Button onClick={() => updateEntry(entry.id, entry.description, selectedFile)}>
                                 Save Changes
                             </Button>
                             <Button onClick={() => deleteEntry(entry.id)}>

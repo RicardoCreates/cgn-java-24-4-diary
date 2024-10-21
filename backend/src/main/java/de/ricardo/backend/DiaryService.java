@@ -44,9 +44,20 @@ public class DiaryService {
         );
     }
 
-    Diary update(Diary diary) {
-        return diaryRepository.save(diary);
+    public Diary update(Diary diary, MultipartFile image) throws IOException {
+        Diary existingDiary = diaryRepository.findById(diary.id())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Diary entry not found"));
+
+        String imageUrl = existingDiary.imageUrl();
+        if (image != null && !image.isEmpty()) {
+            imageUrl = cloudinaryService.uploadImage(image);
+        }
+
+        Diary updatedDiary = new Diary(existingDiary.id(), diary.description(), diary.status(), imageUrl);
+
+        return diaryRepository.save(updatedDiary);
     }
+
 
     void delete(String id) {
         if (!diaryRepository.existsById(id)) {

@@ -53,17 +53,25 @@ public class DiaryController {
         return diaryService.getById(id);
     }
 
-    @PutMapping(path = {"/{id}/update", "/{id}"})
-    Diary update(@PathVariable String id, @RequestBody Diary diary) {
-        if (!diary.id().equals(id)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The id in the url does not match the request body's id");
-        }
-        return diaryService.update(diary);
-    }
-
     @DeleteMapping("/{id}")
     void delete(@PathVariable String id) {
         diaryService.delete(id);
     }
+
+    @PutMapping(path = {"/{id}/update", "/{id}"}, consumes = "multipart/form-data")
+    public Diary updateWithFile(@PathVariable String id,
+                                @RequestParam("description") String description,
+                                @RequestParam("status") DiaryStatus status,
+                                @RequestParam(value = "file", required = false) MultipartFile file) {
+        Diary existingDiary = diaryService.getById(id);
+
+        try {
+            Diary updatedDiary = new Diary(id, description, status, existingDiary.imageUrl());
+            return diaryService.update(updatedDiary, file);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Image upload failed", e);
+        }
+    }
+
 
 }
