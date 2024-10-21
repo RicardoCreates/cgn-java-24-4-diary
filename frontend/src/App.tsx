@@ -87,6 +87,7 @@ export default function App() {
                 setEntries(entries.map(entry =>
                     entry.id === id ? response.data : entry
                 ));
+                setSelectedFile(null);
             })
             .catch(error => console.log(error));
     }
