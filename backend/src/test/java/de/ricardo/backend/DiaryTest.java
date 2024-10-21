@@ -29,9 +29,17 @@ class DiaryTest {
     }
 
     @Test
+    void testEquals() {
+        Diary diary1 = new Diary("123", "Test description", DiaryStatus.SIX_THOUSAND_STEPS, "http://example.com/image.jpg");
+        Diary diary2 = new Diary("123", "Another description", DiaryStatus.SIX_THOUSAND_STEPS, "http://example.com/anotherimage.jpg");
+
+        assertEquals(diary1, diary2);
+    }
+
+    @Test
     void testHashCode() {
-        Diary diary1 = new Diary("Test description", DiaryStatus.SIX_THOUSAND_STEPS, "http://example.com/image.jpg");
-        Diary diary2 = new Diary("Test description", DiaryStatus.SIX_THOUSAND_STEPS, "http://example.com/image.jpg");
+        Diary diary1 = new Diary("123", "Test description", DiaryStatus.SIX_THOUSAND_STEPS, "http://example.com/image.jpg");
+        Diary diary2 = new Diary("123", "Another description", DiaryStatus.SIX_THOUSAND_STEPS, "http://example.com/anotherimage.jpg");
 
         assertEquals(diary1.hashCode(), diary2.hashCode());
     }
