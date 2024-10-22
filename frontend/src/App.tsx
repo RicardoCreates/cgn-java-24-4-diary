@@ -64,22 +64,30 @@ export default function App() {
             .catch(error => console.log(error));
     }
 
-    function updateEntry(id: string, updatedDescription: string) {
+    function updateEntry(id: string, updatedDescription: string, updatedFile: File | null) {
         const entryToUpdate = entries.find(entry => entry.id === id);
 
         if (!entryToUpdate) return;
 
-        const updatedEntry = {
-            id: id,
-            description: updatedDescription,
-            status: entryToUpdate.status
-        };
+        const formData = new FormData();
+        formData.append('id', id);
+        formData.append('description', updatedDescription);
+        formData.append('status', entryToUpdate.status);
 
-        axios.put(`/api/diary/${id}`, updatedEntry)
+        if (updatedFile) {
+            formData.append('file', updatedFile);
+        }
+
+        axios.put(`/api/diary/${id}/update`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
             .then(response => {
                 setEntries(entries.map(entry =>
                     entry.id === id ? response.data : entry
                 ));
+                setSelectedFile(null);
             })
             .catch(error => console.log(error));
     }

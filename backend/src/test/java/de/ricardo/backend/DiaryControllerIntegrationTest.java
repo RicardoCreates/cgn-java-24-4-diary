@@ -123,29 +123,32 @@ class DiaryControllerIntegrationTest {
     @DirtiesContext
     @Test
     void updateDiary() throws Exception {
-        diaryRepository.save(new Diary("1", DiaryStatus.LESS_THAN_SIX_THOUSAND_STEPS, "test" ));
+        when(cloudinary.uploader()).thenReturn(uploader);
+        when(uploader.upload(any(), any())).thenReturn(Map.of("url", "test"));
+
+        diaryRepository.save(new Diary("1", "test", DiaryStatus.LESS_THAN_SIX_THOUSAND_STEPS, "test"));
+
+        MockMultipartFile file = new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "test".getBytes());
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.put("/api/diary/1")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("""
-                                {
-                                    "id": "1",
-                                    "description": "test",
-                                    "status": "LESS_THAN_SIX_THOUSAND_STEPS",
-                                    "imageUrl": "test"
-                                }
-                                """)
+                        MockMvcRequestBuilders.multipart("/api/diary/1/update")
+                                .file(file)
+                                .param("description", "updated description")
+                                .param("status", "LESS_THAN_SIX_THOUSAND_STEPS")
+                                .with(request -> {
+                                    request.setMethod("PUT");
+                                    return request;
+                                })
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
-                        {
-                            "id": "1",
-                            "description": "test",
-                            "status": "LESS_THAN_SIX_THOUSAND_STEPS",
-                            "imageUrl": "test"
-                        }
-                        """));
+                    {
+                        "id": "1",
+                        "description": "updated description",
+                        "status": "LESS_THAN_SIX_THOUSAND_STEPS",
+                        "imageUrl": "test"
+                    }
+                    """));
     }
 
     @DirtiesContext
@@ -213,6 +216,40 @@ class DiaryControllerIntegrationTest {
                 )
                 .andExpect(status().isBadRequest());
     }
+
+    @DirtiesContext
+    @Test
+    void updateDiaryWithoutFile() throws Exception {
+        diaryRepository.save(new Diary("1", "test", DiaryStatus.LESS_THAN_SIX_THOUSAND_STEPS, "test"));
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.multipart("/api/diary/1/update")
+                                .param("description", "updated description")
+                                .param("status", "LESS_THAN_SIX_THOUSAND_STEPS")
+                                .with(request -> {
+                                    request.setMethod("PUT");
+                                    return request;
+                                })
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                {
+                    "id": "1",
+                    "description": "updated description",
+                    "status": "LESS_THAN_SIX_THOUSAND_STEPS",
+                    "imageUrl": "test"
+                }
+                """));
+    }
+
+    @DirtiesContext
+    @Test
+    void getDiaryByIdNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/diary/999"))
+                .andExpect(status().isNotFound());
+    }
+
+
 
 }
 

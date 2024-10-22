@@ -65,14 +65,23 @@ class DiaryServiceTest {
     }
 
     @Test
-    void update() {
-        Diary expectedDiary = new Diary("1", "My first diary entry", DiaryStatus.SIX_THOUSAND_STEPS, "test");
+    void update() throws IOException {
+        Diary existingDiary = new Diary("1", "My first diary entry", DiaryStatus.SIX_THOUSAND_STEPS, "test-url");
+        Diary updatedDiary = new Diary("1", "Updated diary entry", DiaryStatus.EIGHT_THOUSAND_STEPS, "updated-url");
+        MultipartFile updatedImage = mock(MultipartFile.class);
 
-        when(diaryRepository.save(any(Diary.class))).thenReturn(expectedDiary);
+        when(diaryRepository.findById("1")).thenReturn(java.util.Optional.of(existingDiary));
+        when(cloudinaryService.uploadImage(updatedImage)).thenReturn("updated-url");
+        when(diaryRepository.save(any(Diary.class))).thenReturn(updatedDiary);
 
-        diaryService.update(new Diary("1", "My first diary entry", DiaryStatus.SIX_THOUSAND_STEPS, "test"));
+        Diary updateRequest = new Diary("1", "Updated diary entry", DiaryStatus.EIGHT_THOUSAND_STEPS, null);
+        Diary result = diaryService.update(updateRequest, updatedImage);
 
+        verify(diaryRepository, times(1)).findById("1");
+        verify(cloudinaryService, times(1)).uploadImage(updatedImage);
         verify(diaryRepository, times(1)).save(any(Diary.class));
+
+        assertEquals(updatedDiary, result);
     }
 
     @Test
