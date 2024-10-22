@@ -112,6 +112,16 @@ export default function App() {
         ));
     }
 
+    function deleteImage(id: string) {
+        axios.delete(`/api/diary/${id}/image`)
+            .then(() => {
+                setEntries(entries.map(entry =>
+                    entry.id === id ? {...entry, imageUrl: undefined} : entry
+                ));
+            })
+            .catch(error => console.log(error));
+    }
+
     useEffect(() => {
         fetchData()
         getMe()
@@ -136,6 +146,7 @@ export default function App() {
                         addEntry={addEntry}
                         selectedFile={selectedFile}
                         setSelectedFile={setSelectedFile}
+                        deleteImage={deleteImage}
                     />
                 } />
                 </Route>

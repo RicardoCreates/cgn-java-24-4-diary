@@ -19,6 +19,7 @@ type ContentPageProps = {
     addEntry: (description: string, file: File | null) => void;
     selectedFile: File | null;
     setSelectedFile: (file: File | null) => void;
+    deleteImage: (id: string) => void;
 };
 
 
@@ -32,7 +33,8 @@ export default function ContentPage({
                                         updateEntry,
                                         addEntry,
                                         selectedFile,
-                                        setSelectedFile
+                                        setSelectedFile,
+                                        deleteImage
                                     }: ContentPageProps) {
 
 
@@ -59,14 +61,16 @@ export default function ContentPage({
                                 <option value="TEN_THOUSAND_STEPS">10.000 STEPS</option>
                                 <option value="MORE_THAN_TEN_THOUSAND_STEPS">over ⚡︎ 10.000 STEPS</option>
                             </StyledSelect>
-                            {entry.imageUrl && <img src={entry.imageUrl} alt="Uploaded" />}
+                            {entry.imageUrl && <img src={entry.imageUrl} alt="Uploaded"/>}
                             <FileInputButton htmlFor={`file-upload-${entry.id}`}>Update Image</FileInputButton>
                             <HiddenFileInput
                                 id={`file-upload-${entry.id}`}
                                 type="file"
                                 onChange={(event) => setSelectedFile(event.target.files ? event.target.files[0] : null)}
                             />
-
+                            <FileInputButton onClick={() => deleteImage(entry.id)}>
+                                Delete Image
+                            </FileInputButton>
                             <Button onClick={() => updateEntry(entry.id, entry.description, selectedFile)}>
                                 Save Changes
                             </Button>
@@ -100,28 +104,29 @@ export default function ContentPage({
 const ContentContainer = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center;      
-    min-height: 100vh;  
-    margin-bottom: 80px;
+    align-items: center;
+    min-height: 100vh;
+    margin-top: 15px;
+    margin-bottom: 15px;
 `
 
 const StyledContainer = styled.div`
     width: 90%;
-    max-width: 800px;        
+    max-width: 800px;
     background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    align-items: center;      
+    align-items: center;
 `;
 
 const StyledList = styled.ul`
-  list-style-type: none;
-  padding: 10px;
-  margin: 10px;
-  border-radius: 5px;
-  background-color: transparent;
+    list-style-type: none;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    background-color: transparent;
 `;
 
 const StyledListItem = styled.li`
@@ -217,9 +222,9 @@ const StyledLink = styled(Link)`
 `;
 
 const FileInputButton = styled.label`
-    background-color: #42a5f5;
+    background-color: #79b4f5;
     color: white;
-    padding: 10px 20px;
+    padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
     display: inline-block;

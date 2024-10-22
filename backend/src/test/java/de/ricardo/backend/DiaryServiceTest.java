@@ -3,6 +3,7 @@ package de.ricardo.backend;
 import de.ricardo.backend.service.CloudinaryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -102,5 +103,40 @@ class DiaryServiceTest {
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> diaryService.delete(id));
         assertEquals("404 NOT_FOUND \"Diary entry not found\"", exception.getMessage());
         verify(diaryRepository, never()).deleteById(id);
+    }
+
+    @Test
+    void deleteImage() {
+        String id = "1";
+        Diary existingDiary = new Diary(id, "My first diary entry", DiaryStatus.SIX_THOUSAND_STEPS, "test-url");
+
+        when(diaryRepository.findById(id)).thenReturn(java.util.Optional.of(existingDiary));
+
+        diaryService.deleteImage(id);
+
+        verify(diaryRepository, times(1)).findById(id);
+        verify(diaryRepository, times(1)).save(any(Diary.class));
+
+        ArgumentCaptor<Diary> diaryCaptor = ArgumentCaptor.forClass(Diary.class);
+        verify(diaryRepository).save(diaryCaptor.capture());
+        Diary savedDiary = diaryCaptor.getValue();
+
+        assertNull(savedDiary.imageUrl());
+        assertEquals(existingDiary.id(), savedDiary.id());
+        assertEquals(existingDiary.description(), savedDiary.description());
+        assertEquals(existingDiary.status(), savedDiary.status());
+    }
+
+    @Test
+    void deleteImage_throwsException_whenDiaryNotFound() {
+        String id = "non-existent-id";
+
+        when(diaryRepository.findById(id)).thenReturn(java.util.Optional.empty());
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> diaryService.deleteImage(id));
+        assertEquals("404 NOT_FOUND \"Diary entry not found\"", exception.getMessage());
+
+        verify(diaryRepository, times(1)).findById(id);
+        verify(diaryRepository, never()).save(any(Diary.class));
     }
 }

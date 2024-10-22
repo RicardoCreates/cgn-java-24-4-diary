@@ -65,4 +65,12 @@ public class DiaryService {
         }
         diaryRepository.deleteById(id);
     }
+
+    public void deleteImage(String id) {
+        Diary existingDiary = diaryRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Diary entry not found"));
+
+        Diary updatedDiary = new Diary(existingDiary.id(), existingDiary.description(), existingDiary.status(), null);
+        diaryRepository.save(updatedDiary);
+    }
 }

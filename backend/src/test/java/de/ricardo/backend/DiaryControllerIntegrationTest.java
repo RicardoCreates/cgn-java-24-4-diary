@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.io.IOException;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -249,7 +250,26 @@ class DiaryControllerIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
+    @DirtiesContext
+    @Test
+    void deleteImage() throws Exception {
+        Diary diary = new Diary("1", "test", DiaryStatus.LESS_THAN_SIX_THOUSAND_STEPS, "test-url");
+        diaryRepository.save(diary);
+        assertTrue(diaryRepository.findById("1").isPresent());
 
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/diary/1/image"))
+                .andExpect(status().isOk());
+
+        Diary updatedDiary = diaryRepository.findById("1").orElseThrow();
+        assertNull(updatedDiary.imageUrl());
+    }
+
+    @DirtiesContext
+    @Test
+    void deleteImageNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/diary/non-existent-id/image"))
+                .andExpect(status().isNotFound());
+    }
 
 }
 
