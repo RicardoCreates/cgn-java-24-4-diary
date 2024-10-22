@@ -73,5 +73,10 @@ public class DiaryController {
         }
     }
 
+    @DeleteMapping("/{id}/image")
+    public void deleteImage(@PathVariable String id) {
+        diaryService.deleteImage(id);
+    }
+
 
 }
