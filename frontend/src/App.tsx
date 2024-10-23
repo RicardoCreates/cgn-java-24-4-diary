@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar.tsx";
 import GlobalStyles from "./Globalstyles.ts";
 import Footer from "./components/Footer.tsx";
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute.tsx";
+import AddEntry from "./pages/AddEntry.tsx";
 
 type Entry = {
     id: string;
@@ -149,6 +150,20 @@ export default function App() {
                         deleteImage={deleteImage}
                     />
                 } />
+                    <Route path="/addentry" element={
+                        <AddEntry entries={entries}
+                                  description={description}
+                                  setDescription={setDescription}
+                                  handelStatusChange={handelStatusChange}
+                                  handleDescriptionChange={handleDescriptionChange}
+                                  deleteEntry={deleteEntry}
+                                  updateEntry={updateEntry}
+                                  addEntry={addEntry}
+                                  selectedFile={selectedFile}
+                                  setSelectedFile={setSelectedFile}
+                                  deleteImage={deleteImage}
+                        />
+                    }/>
                 </Route>
             </Routes>
             <Footer />
