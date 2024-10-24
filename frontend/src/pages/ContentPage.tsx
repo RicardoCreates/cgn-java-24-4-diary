@@ -84,7 +84,7 @@ export default function ContentPage({
     );
 }
 
-export const ContentContainer = styled.div`
+const ContentContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -93,7 +93,7 @@ export const ContentContainer = styled.div`
     margin-bottom: 15px;
 `
 
-export const StyledContainer = styled.div`
+const StyledContainer = styled.div`
     width: 90%;
     max-width: 800px;
     background-color: white;
@@ -130,7 +130,7 @@ const StyledListItem = styled.li`
     }
 `;
 
-export const Button = styled.button`
+const Button = styled.button`
     background-color: transparent;
     color: #303030;
     padding: 5px 10px;
@@ -149,7 +149,7 @@ export const Button = styled.button`
     }
 `;
 
-export const InputField = styled.input`
+const InputField = styled.input`
     width: 90%;
     padding: 12px;
     margin: 12px 0;
@@ -187,7 +187,7 @@ const StyledSelect = styled.select`
 
 
 
-export const FileInputButton = styled.label`
+const FileInputButton = styled.label`
     background-color: #79b4f5;
     color: white;
     padding: 5px 10px;
@@ -205,7 +205,7 @@ export const FileInputButton = styled.label`
     }
 `;
 
-export const HiddenFileInput = styled.input`
+const HiddenFileInput = styled.input`
     display: none;
 `;
 
