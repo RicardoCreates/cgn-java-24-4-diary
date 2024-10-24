@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 
+
 type DiaryEntry = {
     id: string;
     description: string;
@@ -25,13 +26,10 @@ type ContentPageProps = {
 
 export default function ContentPage({
                                         entries,
-                                        description,
-                                        setDescription,
                                         handelStatusChange,
                                         handleDescriptionChange,
                                         deleteEntry,
                                         updateEntry,
-                                        addEntry,
                                         selectedFile,
                                         setSelectedFile,
                                         deleteImage
@@ -40,6 +38,7 @@ export default function ContentPage({
 
     return (
         <ContentContainer>
+            <StyledAdd to="/addentry">✚</StyledAdd>
             <StyledContainer>
                 <StyledList>
                     {entries.map((entry) => (
@@ -80,22 +79,6 @@ export default function ContentPage({
                         </StyledListItem>
                     ))}
                 </StyledList>
-
-                <h2>Add new Entry</h2>
-                <InputField
-                    type={"text"}
-                    value={description}
-                    onChange={event => setDescription(event.target.value)}
-                    placeholder={"add Entry"}
-                />
-                <FileInputButton htmlFor="file-upload">Image Upload</FileInputButton>
-                <HiddenFileInput
-                    id="file-upload"
-                    type="file"
-                    onChange={event => setSelectedFile(event.target.files ? event.target.files[0] : null)}
-                />
-                <Button onClick={() => addEntry(description, selectedFile)}>Hinzufügen</Button>
-                <StyledLink to="/">◁</StyledLink>
             </StyledContainer>
         </ContentContainer>
     );
@@ -119,6 +102,8 @@ const StyledContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 75px;
+    margin-top: 10px;
 `;
 
 const StyledList = styled.ul`
@@ -200,26 +185,7 @@ const StyledSelect = styled.select`
     }
 `;
 
-const StyledLink = styled(Link)`
-    text-decoration: none;
-    color: black;
-    font-size: 0.8rem;
-    font-weight: 500;
-    padding: 0px 15px;
-    margin: 20px;
-    box-shadow: 0 0 5px rgba(66, 165, 245, 0.5);
-    transition: background-color 0.3s ease;
 
-    @media (min-width: 650px) {
-        font-size: 1.2rem;
-        padding: 8px 16px;
-    }
-
-    &:hover {
-        background-color: #34495e;
-        border-radius: 5px;
-    }
-`;
 
 const FileInputButton = styled.label`
     background-color: #79b4f5;
@@ -241,4 +207,14 @@ const FileInputButton = styled.label`
 
 const HiddenFileInput = styled.input`
     display: none;
+`;
+
+const StyledAdd = styled(Link)`
+    text-decoration: none;
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    border: 0.5px solid #303030;
+    border-radius: 5px;
+    padding: 15px;
 `;
