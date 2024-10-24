@@ -12,25 +12,17 @@ type AddEntryPageProps = {
     entries: DiaryEntry[];
     description: string;
     setDescription: (value: string) => void;
-    handelStatusChange: (id: string, newStatus: "LESS_THAN_SIX_THOUSAND_STEPS" | "SIX_THOUSAND_STEPS" | "EIGHT_THOUSAND_STEPS" | "TEN_THOUSAND_STEPS" | "MORE_THAN_TEN_THOUSAND_STEPS") => void;
-    handleDescriptionChange: (id: string, newDescription: string) => void;
-    deleteEntry: (id: string) => void;
-    updateEntry: (id: string, updatedDescription: string, updatedFile: File | null) => void;
     addEntry: (description: string, file: File | null) => void;
     selectedFile: File | null;
     setSelectedFile: (file: File | null) => void;
-    deleteImage: (id: string) => void;
 };
 
 export default function AddEntry({
-
                                      description,
                                      setDescription,
-
                                      addEntry,
                                      selectedFile,
                                      setSelectedFile,
-
                                  }: AddEntryPageProps) {
     const navigate = useNavigate();
 
