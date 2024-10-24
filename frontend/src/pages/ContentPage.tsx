@@ -38,7 +38,7 @@ export default function ContentPage({
 
     return (
         <ContentContainer>
-            <StyledLink to="/addentry">✚</StyledLink>
+            <StyledAdd to="/addentry">✚</StyledAdd>
             <StyledContainer>
                 <StyledList>
                     {entries.map((entry) => (
@@ -84,7 +84,7 @@ export default function ContentPage({
     );
 }
 
-const ContentContainer = styled.div`
+export const ContentContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -93,7 +93,7 @@ const ContentContainer = styled.div`
     margin-bottom: 15px;
 `
 
-const StyledContainer = styled.div`
+export const StyledContainer = styled.div`
     width: 90%;
     max-width: 800px;
     background-color: white;
@@ -130,7 +130,7 @@ const StyledListItem = styled.li`
     }
 `;
 
-const Button = styled.button`
+export const Button = styled.button`
     background-color: transparent;
     color: #303030;
     padding: 5px 10px;
@@ -149,7 +149,7 @@ const Button = styled.button`
     }
 `;
 
-const InputField = styled.input`
+export const InputField = styled.input`
     width: 90%;
     padding: 12px;
     margin: 12px 0;
@@ -187,7 +187,7 @@ const StyledSelect = styled.select`
 
 
 
-const FileInputButton = styled.label`
+export const FileInputButton = styled.label`
     background-color: #79b4f5;
     color: white;
     padding: 5px 10px;
@@ -205,30 +205,16 @@ const FileInputButton = styled.label`
     }
 `;
 
-const HiddenFileInput = styled.input`
+export const HiddenFileInput = styled.input`
     display: none;
 `;
 
-const StyledLink = styled(Link)`
+const StyledAdd = styled(Link)`
     text-decoration: none;
-    color: black;
-    font-size: 0.8rem;
-    font-weight: 500;
-    padding: 15px 15px;
-    margin: 15px;
-    box-shadow: 0 0 5px rgba(66, 165, 245, 0.5);
-    transition: background-color 0.3s ease;
     position: fixed;
     bottom: 100px;
     right: 20px;
-
-    @media (min-width: 650px) {
-        font-size: 1.2rem;
-        padding: 8px 16px;
-    }
-
-    &:hover {
-        background-color: #34495e;
-        border-radius: 5px;
-    }
+    border: 0.5px solid #303030;
+    border-radius: 5px;
+    padding: 15px;
 `;
