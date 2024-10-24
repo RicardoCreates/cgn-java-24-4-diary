@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import {Link} from "react-router-dom";
+import {useState} from "react";
 
 
 type DiaryEntry = {
@@ -34,15 +35,23 @@ export default function ContentPage({
                                         setSelectedFile,
                                         deleteImage
                                     }: ContentPageProps) {
-
+const [searchTerm, setSearchTerm] = useState("");
 
     return (
         <ContentContainer>
+            <SearchInput
+                type="text"
+                placeholder="️‍👁️‍🗨️ Search entries..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            />
             <StyledAdd to="/addentry">✚</StyledAdd>
             <StyledContainer>
                 <StyledList>
-                    {entries.map((entry) => (
-                        <StyledListItem key={entry.id}>
+                    {entries
+                        .filter(entry => entry.description.toLowerCase().includes(searchTerm.toLowerCase()))
+                        .map((entry) => (
+                            <StyledListItem key={entry.id}>
                             <p>Diary Entry</p>
                             <InputField
                                 type="text"
@@ -61,20 +70,22 @@ export default function ContentPage({
                                 <option value="MORE_THAN_TEN_THOUSAND_STEPS">over ⚡︎ 10.000 STEPS</option>
                             </StyledSelect>
                             {entry.imageUrl && <img src={entry.imageUrl} alt="Uploaded"/>}
-                            <FileInputButton htmlFor={`file-upload-${entry.id}`}>Update Image</FileInputButton>
+                            <br/>
+                            <FileInputButton htmlFor={`file-upload-${entry.id}`}>📂</FileInputButton>
                             <HiddenFileInput
                                 id={`file-upload-${entry.id}`}
                                 type="file"
                                 onChange={(event) => setSelectedFile(event.target.files ? event.target.files[0] : null)}
                             />
                             <FileInputButton onClick={() => deleteImage(entry.id)}>
-                                Delete Image
+                                🗑️
                             </FileInputButton>
+                            <br/>
                             <Button onClick={() => updateEntry(entry.id, entry.description, selectedFile)}>
                                 Save Changes
                             </Button>
                             <Button onClick={() => deleteEntry(entry.id)}>
-                                Delete
+                                Delete Entry
                             </Button>
                         </StyledListItem>
                     ))}
@@ -138,6 +149,7 @@ const Button = styled.button`
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
+    margin: 5px;
 
     &:hover {
         background-color: rgba(144, 202, 249, 0.1);
@@ -188,13 +200,14 @@ const StyledSelect = styled.select`
 
 
 const FileInputButton = styled.label`
-    background-color: #79b4f5;
+    background-color: transparent;
     color: white;
     padding: 5px 10px;
+    border: 0.5px solid #303030;
     border-radius: 5px;
     cursor: pointer;
     display: inline-block;
-    margin: 10px 0;
+    margin: 10px;
 
     &:hover {
         background-color: #1e88e5;
@@ -213,8 +226,28 @@ const StyledAdd = styled(Link)`
     text-decoration: none;
     position: fixed;
     bottom: 100px;
-    right: 20px;
+    right: 10px;
     border: 0.5px solid #303030;
     border-radius: 5px;
     padding: 15px;
+    margin: 10px;
+
+    @media (min-width: 800px) {
+        right: 20%;
+    }
+`;
+
+const SearchInput = styled.input`
+    width: 80%;
+    max-width: 800px;
+    padding: 12px;
+    margin: 12px 0;
+    border: 0.5px solid #303030;
+    border-radius: 5px;
+
+    &:focus {
+        outline: none;
+        border-color: #42a5f5;
+        box-shadow: 0 0 5px rgba(66, 165, 245, 0.5);
+    }
 `;
