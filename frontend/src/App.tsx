@@ -107,7 +107,7 @@ export default function App() {
         ));
     }
 
-    function handelStatusChange(id: string, newStatus: "LESS_THAN_SIX_THOUSAND_STEPS" | "SIX_THOUSAND_STEPS" | "EIGHT_THOUSAND_STEPS" | "TEN_THOUSAND_STEPS" | "MORE_THAN_TEN_THOUSAND_STEPS") {
+    function handleStatusChange(id: string, newStatus: "LESS_THAN_SIX_THOUSAND_STEPS" | "SIX_THOUSAND_STEPS" | "EIGHT_THOUSAND_STEPS" | "TEN_THOUSAND_STEPS" | "MORE_THAN_TEN_THOUSAND_STEPS") {
         setEntries(entries.map(entry =>
             entry.id === id ? {...entry, status: newStatus} : entry
         ));
@@ -140,7 +140,7 @@ export default function App() {
                         entries={entries}
                         description={description}
                         setDescription={setDescription}
-                        handelStatusChange={handelStatusChange}
+                        handleStatusChange={handleStatusChange}
                         handleDescriptionChange={handleDescriptionChange}
                         deleteEntry={deleteEntry}
                         updateEntry={updateEntry}
@@ -154,14 +154,9 @@ export default function App() {
                         <AddEntry entries={entries}
                                   description={description}
                                   setDescription={setDescription}
-                                  handelStatusChange={handelStatusChange}
-                                  handleDescriptionChange={handleDescriptionChange}
-                                  deleteEntry={deleteEntry}
-                                  updateEntry={updateEntry}
                                   addEntry={addEntry}
                                   selectedFile={selectedFile}
                                   setSelectedFile={setSelectedFile}
-                                  deleteImage={deleteImage}
                         />
                     }/>
                 </Route>

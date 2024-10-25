@@ -14,7 +14,7 @@ type ContentPageProps = {
     entries: DiaryEntry[];
     description: string;
     setDescription: (value: string) => void;
-    handelStatusChange: (id: string, newStatus: "LESS_THAN_SIX_THOUSAND_STEPS" | "SIX_THOUSAND_STEPS" | "EIGHT_THOUSAND_STEPS" | "TEN_THOUSAND_STEPS" | "MORE_THAN_TEN_THOUSAND_STEPS") => void;
+    handleStatusChange: (id: string, newStatus: "LESS_THAN_SIX_THOUSAND_STEPS" | "SIX_THOUSAND_STEPS" | "EIGHT_THOUSAND_STEPS" | "TEN_THOUSAND_STEPS" | "MORE_THAN_TEN_THOUSAND_STEPS") => void;
     handleDescriptionChange: (id: string, newDescription: string) => void;
     deleteEntry: (id: string) => void;
     updateEntry: (id: string, updatedDescription: string, updatedFile: File | null) => void;
@@ -27,7 +27,7 @@ type ContentPageProps = {
 
 export default function ContentPage({
                                         entries,
-                                        handelStatusChange,
+                                        handleStatusChange,
                                         handleDescriptionChange,
                                         deleteEntry,
                                         updateEntry,
@@ -61,7 +61,7 @@ const [searchTerm, setSearchTerm] = useState("");
                             <p>Steps done Today</p>
                             <StyledSelect
                                 value={entry.status}
-                                onChange={(event) => handelStatusChange(entry.id, event.target.value as "LESS_THAN_SIX_THOUSAND_STEPS" | "SIX_THOUSAND_STEPS" | "EIGHT_THOUSAND_STEPS" | "TEN_THOUSAND_STEPS" | "MORE_THAN_TEN_THOUSAND_STEPS")}
+                                onChange={(event) => handleStatusChange(entry.id, event.target.value as "LESS_THAN_SIX_THOUSAND_STEPS" | "SIX_THOUSAND_STEPS" | "EIGHT_THOUSAND_STEPS" | "TEN_THOUSAND_STEPS" | "MORE_THAN_TEN_THOUSAND_STEPS")}
                             >
                                 <option value="LESS_THAN_SIX_THOUSAND_STEPS">under ♿︎ 6000 STEPS</option>
                                 <option value="SIX_THOUSAND_STEPS">6000 STEPS</option>
