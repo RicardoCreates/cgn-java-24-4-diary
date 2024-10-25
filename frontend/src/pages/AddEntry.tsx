@@ -34,8 +34,7 @@ export default function AddEntry({
         <Container>
             <Container2>
                 <h2>Add new Entry</h2>
-                <TextField
-                    type={"text"}
+                <StyledTextarea
                     value={description}
                     onChange={event => setDescription(event.target.value)}
                     placeholder={"add Entry"}
@@ -138,12 +137,14 @@ const HiddenFileInput = styled.input`
     display: none;
 `;
 
-const TextField = styled.input`
+const StyledTextarea = styled.textarea`
     width: 90%;
+    height: 75px;
     padding: 12px;
     margin: 12px 0;
     border: 0.5px solid #303030;
     border-radius: 5px;
+    resize: vertical;
 
     &:focus {
         outline: none;

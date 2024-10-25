@@ -53,11 +53,10 @@ const [searchTerm, setSearchTerm] = useState("");
                         .map((entry) => (
                             <StyledListItem key={entry.id}>
                             <p>Diary Entry</p>
-                            <InputField
-                                type="text"
-                                value={entry.description}
-                                onChange={(event) => handleDescriptionChange(entry.id, event.target.value)}
-                            />
+                                <StyledTextarea
+                                    value={entry.description}
+                                    onChange={(event) => handleDescriptionChange(entry.id, event.target.value)}
+                                />
                             <p>Steps done Today</p>
                             <StyledSelect
                                 value={entry.status}
@@ -161,12 +160,14 @@ const Button = styled.button`
     }
 `;
 
-const InputField = styled.input`
+const StyledTextarea = styled.textarea`
     width: 90%;
+    height: 75px;
     padding: 12px;
     margin: 12px 0;
     border: 0.5px solid #303030;
     border-radius: 5px;
+    resize: vertical;
 
     &:focus {
         outline: none;
