@@ -1,24 +1,42 @@
 import styled from "styled-components";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 
 type NavbarProps = {
-    login: () => void
-    logout: () => void
-    username: string
-}
+    login: () => void;
+    logout: () => void;
+    username: string;
+};
 
 export default function Navbar(props: Readonly<NavbarProps>) {
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    function toggleMenu() {
+        setMenuOpen(!menuOpen);
+    }
+
     return (
         <StyledNavbar>
             <StyledLogo>DiaryApp</StyledLogo>
-            <StyledNavItems>
-            <StyledNavItem to={"/"}>Home</StyledNavItem>
-            <StyledNavItem to={"/diary"}>Diary</StyledNavItem>
-            </StyledNavItems>
+            <BurgerMenu onClick={toggleMenu}>
+                <div />
+                <div />
+                <div />
+            </BurgerMenu>
+            <StyledNavContainer menuOpen={menuOpen}>
+                <StyledNavItems>
+                    <StyledNavItem to={"/"}>Home</StyledNavItem>
+                    <StyledNavItem to={"/diary"}>Diary</StyledNavItem>
+                </StyledNavItems>
                 <StyledLogin>
-                <StyledText>Hello {props.username}</StyledText>
-                {(!props.username || props.username === "anonymousUser") ? <Button onClick={props.login}>Login</Button> : <Button onClick={props.logout}>Logout</Button>}
+                    <StyledText>Hello {props.username}</StyledText>
+                    {(!props.username || props.username === "anonymousUser") ? (
+                        <Button onClick={props.login}>Login</Button>
+                    ) : (
+                        <Button onClick={props.logout}>Logout</Button>
+                    )}
                 </StyledLogin>
+            </StyledNavContainer>
         </StyledNavbar>
     );
 }
@@ -32,6 +50,32 @@ const StyledNavbar = styled.nav`
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
+const StyledNavContainer = styled.div<{ menuOpen: boolean }>`
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    justify-content: space-between;
+
+    @media (max-width: 650px) {
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background-color: #2c3e50;
+        padding: 20px;
+        z-index: 1;
+        display: ${({ menuOpen }) => (menuOpen ? "flex" : "none")};
+    }
+`;
+
+const StyledNavItems = styled.div`
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-grow: 1;
+`;
+
 const StyledNavItem = styled(Link)`
     text-decoration: none;
     color: white;
@@ -40,20 +84,15 @@ const StyledNavItem = styled(Link)`
     padding: 4px 2px;
     transition: background-color 0.3s ease;
 
-    @media (min-width: 650px) {
-        font-size: 1.2rem;
-        padding: 8px 16px;
-    }
-
     &:hover {
         background-color: #34495e;
         border-radius: 5px;
     }
-`;
 
-const StyledNavItems = styled.div`
-    display: flex;
-    gap: 20px;
+    @media (min-width: 650px) {
+        font-size: 1.2rem;
+        padding: 8px 16px;
+    }
 `;
 
 const StyledLogo = styled.h1`
@@ -83,11 +122,30 @@ const Button = styled.button`
 `;
 
 const StyledText = styled.p`
-    color: black;
-`
+    color: white;
+    margin: 0;
+`;
 
 const StyledLogin = styled.div`
     display: flex;
-    flex-direction: column-reverse;
-`
+    align-items: center;
+    gap: 10px;
+`;
 
+const BurgerMenu = styled.div`
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+
+    div {
+        width: 25px;
+        height: 3px;
+        background-color: white;
+        margin: 4px 0;
+        transition: 0.4s;
+    }
+
+    @media (max-width: 650px) {
+        display: flex;
+    }
+`;
