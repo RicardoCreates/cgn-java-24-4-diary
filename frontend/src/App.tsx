@@ -133,7 +133,7 @@ export default function App() {
             <GlobalStyles />
             <Navbar login={login} logout={logout} username={username}/>
             <Routes>
-                <Route path="/" element={<LandingPage />} />
+                <Route path="/" element={<LandingPage login={login} logout={logout} username={username} />} />
                 <Route element={<ProtectedRoute username={username}/>}>
                 <Route path="/diary" element={
                     <ContentPage
