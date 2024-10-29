@@ -1,11 +1,26 @@
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 
-export default function LandingPage(){
+type LandingPageProps = {
+    login: () => void;
+    logout: () => void;
+    username: string;
+};
+
+export default function LandingPage(props: Readonly<LandingPageProps>){
     return (
         <StyledContainer>
             <StyledHeadline>Welcome to your Diary</StyledHeadline>
             <StyledLink to={"/diary"}>Go to your diary</StyledLink>
+            <br/>
+            <br/>
+            <StyledText>Hello {props.username}</StyledText>
+            <br/>
+            {(!props.username || props.username === "anonymousUser") ? (
+                <Button onClick={props.login}>Login</Button>
+            ) : (
+                <Button onClick={props.logout}>Logout</Button>
+            )}
         </StyledContainer>
     );
 }
@@ -44,3 +59,29 @@ const StyledHeadline = styled.h1`
     margin-bottom: 20px;
     text-align: center;
 `
+
+
+const Button = styled.button`
+    background-color: transparent;
+    color: black;
+    padding: 5px 10px;
+    border: 0.5px solid #303030;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+
+    &:hover {
+        background-color: rgba(144, 202, 249, 0.1);
+    }
+
+    &:active {
+        background-color: rgba(144, 202, 249, 0.2);
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+`;
+
+const StyledText = styled.p`
+    color: black;
+    margin: 0;
+    font-weight: bold;
+`;
