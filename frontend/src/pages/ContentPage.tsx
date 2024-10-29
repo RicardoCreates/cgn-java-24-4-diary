@@ -168,6 +168,7 @@ const StyledTextarea = styled.textarea`
     border: 0.5px solid #303030;
     border-radius: 5px;
     resize: vertical;
+    font-family: sans-serif;
 
     &:focus {
         outline: none;
