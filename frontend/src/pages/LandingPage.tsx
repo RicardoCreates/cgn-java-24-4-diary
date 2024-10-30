@@ -14,6 +14,7 @@ export default function LandingPage(props: Readonly<LandingPageProps>){
             <StyledLink to={"/diary"}>Go to your diary</StyledLink>
             <br/>
             <br/>
+            <MobileOnlyWrapper>
             <StyledText>Hello {props.username}</StyledText>
             <br/>
             {(!props.username || props.username === "anonymousUser") ? (
@@ -21,9 +22,16 @@ export default function LandingPage(props: Readonly<LandingPageProps>){
             ) : (
                 <Button onClick={props.logout}>Logout</Button>
             )}
+            </MobileOnlyWrapper>
         </StyledContainer>
     );
 }
+
+const MobileOnlyWrapper = styled.div`
+    @media (min-width: 650px) {
+        display: none;
+    }
+`;
 
 const StyledContainer = styled.div`
     display: flex;
