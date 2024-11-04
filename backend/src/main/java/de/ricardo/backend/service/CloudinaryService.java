@@ -1,6 +1,7 @@
 package de.ricardo.backend.service;
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.Transformation;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +21,9 @@ public class CloudinaryService {
     public String uploadImage(MultipartFile image) throws IOException {
         File fileToUpload = File.createTempFile("file", null);
         image.transferTo(fileToUpload);
-        Map response = cloudinary.uploader().upload(fileToUpload, Map.of());
+        Map response = cloudinary.uploader().upload(fileToUpload, Map.of(
+                "transformation", new Transformation().width(300).height(200).crop("fill")
+        ));
         String imageUrl = response.get("url").toString();
         System.out.println("Image uploaded successfully: " + imageUrl);
         return imageUrl;
