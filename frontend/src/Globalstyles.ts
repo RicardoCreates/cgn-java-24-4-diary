@@ -2,11 +2,11 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyles = createGlobalStyle`
     body {
-        font-family: Arial, sans-serif;
+        background-color: ${({ theme }) => theme.background};
+        color: ${({ theme }) => theme.text};
+        transition: all 0.3s linear;
         margin: 0;
-        padding: 0;
-        background-color: #ffffff;
-        transition: background-color 0.3s ease;
+        font-family: Arial, sans-serif;
     }
 
 

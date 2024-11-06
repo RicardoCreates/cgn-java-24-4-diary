@@ -6,6 +6,7 @@ type NavbarProps = {
     login: () => void;
     logout: () => void;
     username: string;
+    toggleTheme: () => void;
 };
 
 export default function Navbar(props: Readonly<NavbarProps>) {
@@ -27,6 +28,7 @@ export default function Navbar(props: Readonly<NavbarProps>) {
                 <StyledNavItems>
                     <StyledNavItem to={"/"}>Home</StyledNavItem>
                     <StyledNavItem to={"/diary"}>Diary</StyledNavItem>
+                    <Button onClick={props.toggleTheme}>Toggle Theme</Button>
                 </StyledNavItems>
                 <StyledLogin>
                     <StyledText>Hello {props.username}</StyledText>
