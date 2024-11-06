@@ -17,7 +17,11 @@ type Entry = {
     status: "LESS_THAN_SIX_THOUSAND_STEPS" | "SIX_THOUSAND_STEPS" | "EIGHT_THOUSAND_STEPS" | "TEN_THOUSAND_STEPS" | "MORE_THAN_TEN_THOUSAND_STEPS";
 };
 
-export default function App() {
+type AppProps = {
+    toggleTheme: () => void;
+};
+
+export default function App({ toggleTheme }: AppProps) {
     const [entries, setEntries] = useState<Entry[]>([]);
     const [description, setDescription] = useState<string>("");
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -161,26 +165,27 @@ export default function App() {
 
     return(
         <>
-            <GlobalStyles />
+            <GlobalStyles/>
             <Navbar login={login} logout={logout} username={username}/>
+            <button onClick={toggleTheme}>Toggle Theme</button>
             <Routes>
-                <Route path="/" element={<LandingPage login={login} logout={logout} username={username} />} />
+                <Route path="/" element={<LandingPage login={login} logout={logout} username={username}/>}/>
                 <Route element={<ProtectedRoute username={username}/>}>
-                <Route path="/diary" element={
-                    <ContentPage
-                        entries={entries}
-                        description={description}
-                        setDescription={setDescription}
-                        handleStatusChange={handleStatusChange}
-                        handleDescriptionChange={handleDescriptionChange}
-                        deleteEntry={deleteEntry}
-                        updateEntry={updateEntry}
-                        addEntry={addEntry}
-                        selectedFile={selectedFile}
-                        setSelectedFile={setSelectedFile}
-                        deleteImage={deleteImage}
-                    />
-                } />
+                    <Route path="/diary" element={
+                        <ContentPage
+                            entries={entries}
+                            description={description}
+                            setDescription={setDescription}
+                            handleStatusChange={handleStatusChange}
+                            handleDescriptionChange={handleDescriptionChange}
+                            deleteEntry={deleteEntry}
+                            updateEntry={updateEntry}
+                            addEntry={addEntry}
+                            selectedFile={selectedFile}
+                            setSelectedFile={setSelectedFile}
+                            deleteImage={deleteImage}
+                        />
+                    }/>
                     <Route path="/addentry" element={
                         <AddEntry entries={entries}
                                   description={description}
@@ -192,8 +197,8 @@ export default function App() {
                     }/>
                 </Route>
             </Routes>
-            <Footer />
-            <ToastContainer />
+            <Footer/>
+            <ToastContainer/>
         </>
     )
 }
