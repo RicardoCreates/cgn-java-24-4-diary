@@ -108,7 +108,9 @@ const ContentContainer = styled.div`
 const StyledContainer = styled.div`
     width: 90%;
     max-width: 800px;
-    background-color: white;
+    //background-color: white;
+    background-color: ${({ theme }) => theme.inputBackground};
+    color: ${({ theme }) => theme.text};
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     display: flex;
@@ -138,7 +140,8 @@ const StyledListItem = styled.li`
     p {
         margin: 5px 0;
         font-size: 16px;
-        color: black;
+        //color: black;
+        color: ${({ theme }) => theme.text};
     }
 `;
 
@@ -230,6 +233,7 @@ const StyledAdd = styled(Link)`
     border-radius: 5px;
     padding: 15px;
     margin: 10px;
+    color: ${({ theme }) => theme.text};
 
     @media (min-width: 800px) {
         right: 20%;

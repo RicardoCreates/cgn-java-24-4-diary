@@ -39,8 +39,10 @@ const StyledContainer = styled.div`
     align-items: center;
     justify-content: center;
     height: 80vh;
-    background-color: #f7f9fc;
-    padding: 20px 20px 40px;
+    background-color: ${({ theme }) => theme.body};
+    color: ${({ theme }) => theme.text};
+    //padding: 20px 20px 40px;
+    padding: 40px;
 `
 
 const StyledLink = styled(Link)`
