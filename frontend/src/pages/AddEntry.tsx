@@ -101,8 +101,10 @@ const Container2 = styled.div`
 `;
 
 const AddEntryButton = styled.button`
-    background-color: transparent;
-    color: #303030;
+    //background-color: transparent;
+    background-color: ${({ theme }) => theme.buttonBackground};
+    //color: #303030;
+    color: ${({ theme }) => theme.text};
     padding: 5px 10px;
     border: 0.5px solid #303030;
     border-radius: 5px;
@@ -110,7 +112,8 @@ const AddEntryButton = styled.button`
     font-weight: bold;
 
     &:hover {
-        background-color: rgba(144, 202, 249, 0.1);
+        background-color: ${({ theme }) => theme.buttonHover};
+        //background-color: rgba(144, 202, 249, 0.1);
     }
 
     &:active {
