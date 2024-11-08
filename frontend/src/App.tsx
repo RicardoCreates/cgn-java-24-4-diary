@@ -1,15 +1,18 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import {Route, Routes} from "react-router-dom";
-import LandingPage from "./pages/LandingPage.tsx";
-import ContentPage from "./pages/ContentPage.tsx";
-import Navbar from "./components/Navbar.tsx";
-import GlobalStyles from "./Globalstyles.ts";
-import Footer from "./components/Footer.tsx";
-import ProtectedRoute from "./components/protectedRoute/ProtectedRoute.tsx";
-import AddEntry from "./pages/AddEntry.tsx";
-import {toast, ToastContainer} from "react-toastify";
+import { Route, Routes } from "react-router-dom";
+import LandingPage from "./pages/LandingPage";
+import ContentPage from "./pages/ContentPage";
+import Navbar from "./components/Navbar";
+import GlobalStyles from "./Globalstyles";
+import Footer from "./components/Footer";
+import ProtectedRoute from "./components/protectedRoute/ProtectedRoute";
+import AddEntry from "./pages/AddEntry";
+import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { ThemeProvider } from 'styled-components';
+import { lightTheme, darkTheme } from './themes';
+
 
 type Entry = {
     id: string;
@@ -21,23 +24,27 @@ export default function App() {
     const [entries, setEntries] = useState<Entry[]>([]);
     const [description, setDescription] = useState<string>("");
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [username, setUsername] = useState<string>("")
+    const [username, setUsername] = useState<string>("");
+    const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
-    function login(){
-        const host = window.location.host === 'localhost:5173' ? 'http://localhost:8080' : window.location.origin
-        window.open(host+'/oauth2/authorization/github', '_self')
+    function toggleTheme() {
+        setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+    }
+
+    function login() {
+        const host = window.location.host === 'localhost:5173' ? 'http://localhost:8080' : window.location.origin;
+        window.open(host + '/oauth2/authorization/github', '_self');
     }
 
     function logout() {
-        const host = window.location.host === 'localhost:5173' ? 'http://localhost:8080' : window.location.origin
-        window.open(host+'/api/auth/logout', '_self')
+        const host = window.location.host === 'localhost:5173' ? 'http://localhost:8080' : window.location.origin;
+        window.open(host + '/api/auth/logout', '_self');
     }
-
 
     function getMe() {
         axios.get("api/auth/me")
             .then(r => setUsername(r.data))
-            .catch(() => setUsername(""))
+            .catch(() => setUsername(""));
     }
 
     function fetchData() {
@@ -74,7 +81,6 @@ export default function App() {
         );
     }
 
-
     function updateEntry(id: string, updatedDescription: string, updatedFile: File | null) {
         const entryToUpdate = entries.find(entry => entry.id === id);
 
@@ -90,18 +96,18 @@ export default function App() {
         }
 
         toast.promise(
-        axios.put(`/api/diary/${id}/update`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        })
-            .then(response => {
-                setEntries(entries.map(entry =>
-                    entry.id === id ? response.data : entry
-                ));
-                setSelectedFile(null);
+            axios.put(`/api/diary/${id}/update`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
             })
-            .catch(error => console.log(error)),
+                .then(response => {
+                    setEntries(entries.map(entry =>
+                        entry.id === id ? response.data : entry
+                    ));
+                    setSelectedFile(null);
+                })
+                .catch(error => console.log(error)),
             {
                 pending: 'Updating is pending',
                 success: 'Entry updated! 👌',
@@ -112,88 +118,91 @@ export default function App() {
 
     function deleteEntry(id: string) {
         toast.promise(
-        axios.delete(`/api/diary/${id}`)
-            .then(() => {
-                setEntries(entries.filter(entry => entry.id !== id))
-            })
-            .catch(error => console.log(error)),
-                {
-                    pending: 'Deleting is pending',
-                    success: 'Entry deleted! 👌',
-                    error: 'Deleting rejected 🤯'
-                }
-            );
+            axios.delete(`/api/diary/${id}`)
+                .then(() => {
+                    setEntries(entries.filter(entry => entry.id !== id));
+                })
+                .catch(error => console.log(error)),
+            {
+                pending: 'Deleting is pending',
+                success: 'Entry deleted! 👌',
+                error: 'Deleting rejected 🤯'
+            }
+        );
     }
 
     function handleDescriptionChange(id: string, newDescription: string) {
         setEntries(entries.map(entry =>
-            entry.id === id ? {...entry, description: newDescription} : entry
+            entry.id === id ? { ...entry, description: newDescription } : entry
         ));
     }
 
     function handleStatusChange(id: string, newStatus: "LESS_THAN_SIX_THOUSAND_STEPS" | "SIX_THOUSAND_STEPS" | "EIGHT_THOUSAND_STEPS" | "TEN_THOUSAND_STEPS" | "MORE_THAN_TEN_THOUSAND_STEPS") {
         setEntries(entries.map(entry =>
-            entry.id === id ? {...entry, status: newStatus} : entry
+            entry.id === id ? { ...entry, status: newStatus } : entry
         ));
     }
 
     function deleteImage(id: string) {
         toast.promise(
-        axios.delete(`/api/diary/${id}/image`)
-            .then(() => {
-                setEntries(entries.map(entry =>
-                    entry.id === id ? {...entry, imageUrl: undefined} : entry
-                ));
-            })
-            .catch(error => console.log(error)),
-        {
-            pending: 'Deleting is pending',
+            axios.delete(`/api/diary/${id}/image`)
+                .then(() => {
+                    setEntries(entries.map(entry =>
+                        entry.id === id ? { ...entry, imageUrl: undefined } : entry
+                    ));
+                })
+                .catch(error => console.log(error)),
+            {
+                pending: 'Deleting is pending',
                 success: 'Image deleted! 👌',
-            error: 'Deleting rejected 🤯'
-        }
-    );
+                error: 'Deleting rejected 🤯'
+            }
+        );
     }
 
     useEffect(() => {
-        fetchData()
-        getMe()
+        fetchData();
+        getMe();
     }, []);
 
-    return(
+    return (
         <>
+            <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
             <GlobalStyles />
-            <Navbar login={login} logout={logout} username={username}/>
+                <Navbar login={login} logout={logout} username={username} toggleTheme={toggleTheme} />
             <Routes>
                 <Route path="/" element={<LandingPage login={login} logout={logout} username={username} />} />
-                <Route element={<ProtectedRoute username={username}/>}>
-                <Route path="/diary" element={
-                    <ContentPage
-                        entries={entries}
-                        description={description}
-                        setDescription={setDescription}
-                        handleStatusChange={handleStatusChange}
-                        handleDescriptionChange={handleDescriptionChange}
-                        deleteEntry={deleteEntry}
-                        updateEntry={updateEntry}
-                        addEntry={addEntry}
-                        selectedFile={selectedFile}
-                        setSelectedFile={setSelectedFile}
-                        deleteImage={deleteImage}
-                    />
-                } />
-                    <Route path="/addentry" element={
-                        <AddEntry entries={entries}
-                                  description={description}
-                                  setDescription={setDescription}
-                                  addEntry={addEntry}
-                                  selectedFile={selectedFile}
-                                  setSelectedFile={setSelectedFile}
+                <Route element={<ProtectedRoute username={username} />}>
+                    <Route path="/diary" element={
+                        <ContentPage
+                            entries={entries}
+                            description={description}
+                            setDescription={setDescription}
+                            handleStatusChange={handleStatusChange}
+                            handleDescriptionChange={handleDescriptionChange}
+                            deleteEntry={deleteEntry}
+                            updateEntry={updateEntry}
+                            addEntry={addEntry}
+                            selectedFile={selectedFile}
+                            setSelectedFile={setSelectedFile}
+                            deleteImage={deleteImage}
                         />
-                    }/>
+                    } />
+                    <Route path="/addentry" element={
+                        <AddEntry
+                            entries={entries}
+                            description={description}
+                            setDescription={setDescription}
+                            addEntry={addEntry}
+                            selectedFile={selectedFile}
+                            setSelectedFile={setSelectedFile}
+                        />
+                    } />
                 </Route>
             </Routes>
             <Footer />
             <ToastContainer />
+            </ThemeProvider>
         </>
-    )
+    );
 }

@@ -39,8 +39,10 @@ const StyledContainer = styled.div`
     align-items: center;
     justify-content: center;
     height: 80vh;
-    background-color: #f7f9fc;
-    padding: 20px 20px 40px;
+    background-color: ${({ theme }) => theme.body};
+    color: ${({ theme }) => theme.text};
+    //padding: 20px 20px 40px;
+    padding: 40px;
 `
 
 const StyledLink = styled(Link)`
@@ -57,13 +59,15 @@ const StyledLink = styled(Link)`
     transition: background-color 0.3s ease;
 
     &:hover {
-        background-color: #ffffff;
+        //background-color: #ffffff;
+        background-color: ${({ theme }) => theme.inputBackground};
     }
 `
 
 const StyledHeadline = styled.h1`
     font-size: 3rem;
-    color: #2c3e50;
+    //color: #2c3e50;
+    color: ${({ theme }) => theme.text};
     margin-bottom: 20px;
     text-align: center;
 `
@@ -71,7 +75,7 @@ const StyledHeadline = styled.h1`
 
 const Button = styled.button`
     background-color: transparent;
-    color: black;
+    color: ${({ theme }) => theme.text};
     padding: 5px 10px;
     border: 0.5px solid #303030;
     border-radius: 5px;
@@ -89,7 +93,7 @@ const Button = styled.button`
 `;
 
 const StyledText = styled.p`
-    color: black;
+    color: ${({ theme }) => theme.text};
     margin: 0;
     font-weight: bold;
 `;

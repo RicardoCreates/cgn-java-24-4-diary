@@ -79,26 +79,32 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
-    margin-top: 15px;
+    //margin-top: 15px;
     margin-bottom: 15px;
+    background-color: ${({ theme }) => theme.body};
+    color: ${({ theme }) => theme.text};
 `
 
 const Container2 = styled.div`
     width: 90%;
     max-width: 800px;
-    background-color: white;
+    //background-color: white;
+    background-color: ${({ theme }) => theme.inputBackground};
+    color: ${({ theme }) => theme.text};
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 75px;
-    margin-top: 10px;
+    margin-top: 150px;
 `;
 
 const AddEntryButton = styled.button`
-    background-color: transparent;
-    color: #303030;
+    //background-color: transparent;
+    background-color: ${({ theme }) => theme.buttonBackground};
+    //color: #303030;
+    color: ${({ theme }) => theme.text};
     padding: 5px 10px;
     border: 0.5px solid #303030;
     border-radius: 5px;
@@ -106,7 +112,8 @@ const AddEntryButton = styled.button`
     font-weight: bold;
 
     &:hover {
-        background-color: rgba(144, 202, 249, 0.1);
+        background-color: ${({ theme }) => theme.buttonHover};
+        //background-color: rgba(144, 202, 249, 0.1);
     }
 
     &:active {

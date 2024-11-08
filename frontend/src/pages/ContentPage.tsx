@@ -99,14 +99,18 @@ const ContentContainer = styled.div`
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
-    margin-top: 15px;
+    background-color: ${({ theme }) => theme.body};
+    color: ${({ theme }) => theme.text};
+    //margin-top: 15px;
     margin-bottom: 15px;
-`
+`;
 
 const StyledContainer = styled.div`
     width: 90%;
     max-width: 800px;
-    background-color: white;
+    //background-color: white;
+    background-color: ${({ theme }) => theme.inputBackground};
+    color: ${({ theme }) => theme.text};
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     display: flex;
@@ -136,27 +140,23 @@ const StyledListItem = styled.li`
     p {
         margin: 5px 0;
         font-size: 16px;
-        color: black;
+        //color: black;
+        color: ${({ theme }) => theme.text};
     }
 `;
 
 const Button = styled.button`
-    background-color: transparent;
-    color: #303030;
+    background-color: ${({ theme }) => theme.buttonBackground};
+    color: ${({ theme }) => theme.text};
     padding: 5px 10px;
-    border: 0.5px solid #303030;
+    border: 0.5px solid ${({ theme }) => theme.borderColor};
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
     margin: 5px;
 
     &:hover {
-        background-color: rgba(144, 202, 249, 0.1);
-    }
-
-    &:active {
-        background-color: rgba(144, 202, 249, 0.2);
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        background-color: ${({ theme }) => theme.buttonHover};
     }
 `;
 
@@ -233,6 +233,7 @@ const StyledAdd = styled(Link)`
     border-radius: 5px;
     padding: 15px;
     margin: 10px;
+    color: ${({ theme }) => theme.text};
 
     @media (min-width: 800px) {
         right: 20%;
@@ -243,8 +244,10 @@ const SearchInput = styled.input`
     width: 80%;
     max-width: 800px;
     padding: 12px;
-    margin: 12px 0;
-    border: 0.5px solid #303030;
+    margin-top: 15px;
+    background-color: ${({ theme }) => theme.inputBackground};
+    color: ${({ theme }) => theme.text};
+    border: 0.5px solid ${({ theme }) => theme.borderColor};
     border-radius: 5px;
 
     &:focus {
