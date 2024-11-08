@@ -41,7 +41,6 @@ const StyledContainer = styled.div`
     height: 80vh;
     background-color: ${({ theme }) => theme.body};
     color: ${({ theme }) => theme.text};
-    //padding: 20px 20px 40px;
     padding: 40px;
 `
 
@@ -59,14 +58,12 @@ const StyledLink = styled(Link)`
     transition: background-color 0.3s ease;
 
     &:hover {
-        //background-color: #ffffff;
         background-color: ${({ theme }) => theme.inputBackground};
     }
 `
 
 const StyledHeadline = styled.h1`
     font-size: 3rem;
-    //color: #2c3e50;
     color: ${({ theme }) => theme.text};
     margin-bottom: 20px;
     text-align: center;
