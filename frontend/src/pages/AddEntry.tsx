@@ -79,7 +79,6 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
-    //margin-top: 15px;
     margin-bottom: 15px;
     background-color: ${({ theme }) => theme.body};
     color: ${({ theme }) => theme.text};
@@ -88,7 +87,6 @@ const Container = styled.div`
 const Container2 = styled.div`
     width: 90%;
     max-width: 800px;
-    //background-color: white;
     background-color: ${({ theme }) => theme.inputBackground};
     color: ${({ theme }) => theme.text};
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -101,9 +99,7 @@ const Container2 = styled.div`
 `;
 
 const AddEntryButton = styled.button`
-    //background-color: transparent;
     background-color: ${({ theme }) => theme.buttonBackground};
-    //color: #303030;
     color: ${({ theme }) => theme.text};
     padding: 5px 10px;
     border: 0.5px solid #303030;
@@ -113,7 +109,6 @@ const AddEntryButton = styled.button`
 
     &:hover {
         background-color: ${({ theme }) => theme.buttonHover};
-        //background-color: rgba(144, 202, 249, 0.1);
     }
 
     &:active {

@@ -101,14 +101,12 @@ const ContentContainer = styled.div`
     min-height: 100vh;
     background-color: ${({ theme }) => theme.body};
     color: ${({ theme }) => theme.text};
-    //margin-top: 15px;
     margin-bottom: 15px;
 `;
 
 const StyledContainer = styled.div`
     width: 90%;
     max-width: 800px;
-    //background-color: white;
     background-color: ${({ theme }) => theme.inputBackground};
     color: ${({ theme }) => theme.text};
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -140,7 +138,6 @@ const StyledListItem = styled.li`
     p {
         margin: 5px 0;
         font-size: 16px;
-        //color: black;
         color: ${({ theme }) => theme.text};
     }
 `;
